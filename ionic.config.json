@@ -1,0 +1,7 @@
+{
+  "name": "ascii-pay-terminal",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
