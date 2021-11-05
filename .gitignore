@@ -26,3 +26,21 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+
+/src/types/graphql-global.ts
+
+# misc
+**/__generated__
+schema.graphql
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db

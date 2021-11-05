@@ -1,0 +1,6 @@
+{
+  "appId": "io.ionic.ascii.pay.terminal",
+  "appName": "ascii-pay-terminal",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}
