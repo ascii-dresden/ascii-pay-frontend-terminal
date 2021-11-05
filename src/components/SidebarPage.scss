@@ -28,6 +28,11 @@
         height: 1.8rem;
       }
 
+      #sidebar-ascii-logo {
+        width: 2.4rem !important;
+        height: 2.4rem !important;
+      }
+
       &:hover {
         background-color: var(--primary-hover-background);
       }
