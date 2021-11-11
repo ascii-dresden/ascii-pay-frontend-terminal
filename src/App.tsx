@@ -15,8 +15,12 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
   const dispatch = useAppDispatch();
 
   (async () => {
-    if (await AndroidFullScreen.isImmersiveModeSupported()) {
-      await AndroidFullScreen.immersiveMode();
+    try {
+      if (await AndroidFullScreen.isImmersiveModeSupported()) {
+        await AndroidFullScreen.immersiveMode();
+      }
+    } catch {
+      console.log('Cannot enter fullscreen mode!');
     }
   })();
 

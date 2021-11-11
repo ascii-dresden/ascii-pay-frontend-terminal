@@ -1,12 +1,13 @@
 import { useApolloClient } from '@apollo/client';
 import React, { useState } from 'react';
-import { MdApps, MdManageSearch, MdOutlineCalculate, MdSchedule } from 'react-icons/md';
+import { MdApps, MdManageSearch, MdOutlineCalculate } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
 import {
   AsciiPayAuthenticationClient,
   WebSocketMessageHandler,
   WebSocketResponse,
 } from '../ascii-pay-authentication-client';
+import ClockIcon from '../components/ClockIcon';
 import Keypad from '../components/Keypad';
 import Money from '../components/Money';
 import Sidebar, { SidebarAction } from '../components/SidebarPage';
@@ -70,7 +71,7 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
     },
     {
       title: 'Enable screensaver',
-      element: <MdSchedule />,
+      element: <ClockIcon />,
       action: (event) => {
         event.stopPropagation();
         dispatch(setScreensaver(true));

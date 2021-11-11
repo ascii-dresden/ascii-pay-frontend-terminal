@@ -1,10 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { MdLocalAtm, MdPeople, MdSchedule, MdSettings, MdShoppingCart } from 'react-icons/md';
+import { MdLocalAtm, MdPeople, MdSettings, MdShoppingCart } from 'react-icons/md';
 import './StartPage.scss';
 import SidebarPage, { SidebarAction } from './components/SidebarPage';
 import { setScreensaver } from './payment/paymentSlice';
 import { useAppDispatch } from './store';
+import ClockIcon from './components/ClockIcon';
 
 const useDate = () => {
   const locale = 'en';
@@ -43,7 +44,7 @@ export default function StartPage() {
   const sidebarActions: SidebarAction[] = [
     {
       title: 'Enable screensaver',
-      element: <MdSchedule />,
+      element: <ClockIcon />,
       action: (event) => {
         event.stopPropagation();
         dispatch(setScreensaver(true));
