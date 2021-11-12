@@ -1,5 +1,5 @@
-import { useQuery } from '@apollo/client';
 import React from 'react';
+import { useQuery } from '@apollo/client';
 import { GET_ACCOUNTS } from '../graphql';
 import { getAccounts } from '../__generated__/getAccounts';
 import './AccountList.scss';
