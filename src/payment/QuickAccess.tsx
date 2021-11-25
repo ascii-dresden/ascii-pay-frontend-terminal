@@ -1,5 +1,4 @@
 import React from 'react';
-import { MdCoffee, MdLiquor } from 'react-icons/md';
 import Money from '../components/Money';
 import { useAppDispatch } from '../store';
 import { StampType } from '../types/graphql-global';
@@ -136,22 +135,22 @@ function QuickAccessEntryView(props: { entry: QuickAccessEntry }) {
   if (props.entry.payWithStamps === StampType.COFFEE) {
     stemp = (
       <div key="coffee-10" className="quick-access-entry-stamp">
-        <MdCoffee />
+        <img id="coffee-stamp" src="/kaffe_stempel_icons.svg" alt="" />
         <span>-10</span>
       </div>
     );
   } else if (props.entry.payWithStamps === StampType.BOTTLE) {
     stemp = (
       <div key="bottle-10" className="quick-access-entry-stamp">
-        <MdLiquor />
+        <img id="bottle-stamp" src="/getraeke_stempel_icons.svg" alt="" />
         <span>-10</span>
       </div>
     );
   }
   if (props.entry.giveStamps === StampType.COFFEE) {
-    stemp = <img id="sidebar-ascii-logo" src="/favicon.svg" alt="" />;
+    stemp = <img id="coffee-stamp" src="/kaffe_stempel_icons.svg" alt="" />;
   } else if (props.entry.giveStamps === StampType.BOTTLE) {
-    stemp = <img id="sidebar-ascii-logo" src="/favicon.svg" alt="" />;
+    stemp = <img id="bottle-stamp" src="/getraeke_stempel_icons.svg" alt="" />;
   }
 
   let center: any | null = null;

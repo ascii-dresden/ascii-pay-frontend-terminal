@@ -17,6 +17,7 @@
     flex-grow: 0.9;
   }
 }
+
 .quick-access-entry {
   flex: 1 1 0px;
   padding: 0.5rem;
@@ -76,6 +77,14 @@
   &.coffee-stamp,
   &.coffee-free {
     border-color: var(--coffee-color);
+  }
+}
+
+body[data-theme='dark'] {
+  .quick-access-entry {
+    img {
+      filter: invert(1);
+    }
   }
 }
 

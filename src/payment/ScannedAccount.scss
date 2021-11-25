@@ -8,7 +8,6 @@
   border-bottom: solid 1px var(--border-color);
   border-left: solid 1px var(--border-color);
 }
-
 .scanned-account-name {
   line-height: 1.4rem;
   text-align: left;
@@ -36,4 +35,21 @@
     width: 1.2rem;
     height: 1.2rem;
   }
+}
+.scanned-account-empty {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  & > span {
+    display: block;
+    padding-left: 2rem;
+  }
+}
+.scanned-account-refresh {
+  width: 4.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
 }

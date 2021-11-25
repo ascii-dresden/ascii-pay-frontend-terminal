@@ -142,7 +142,7 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
     <Sidebar defaultAction={handleGoBack} content={quickActions}>
       <div className="payment-page-left">{content}</div>
       <div className="payment-page-right">
-        <ScannedAccount />
+        <ScannedAccount authClient={props.authClient} />
         <Basket />
         <div className="payment-page-summary">
           <Money value={paymentTotal} />
@@ -152,7 +152,7 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
             onClick={payAction}
             className={storedPaymentItems.length > 0 || keypadValue !== 0 ? 'enabled' : 'disabled'}
           >
-            Pay
+            Bezahlen
           </span>
         </div>
       </div>

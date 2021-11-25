@@ -1,4 +1,17 @@
 .stamp {
   display: flex;
   align-items: center;
+
+  img {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+body[data-theme='dark'] {
+  .stamp {
+    img {
+      filter: invert(1);
+    }
+  }
 }

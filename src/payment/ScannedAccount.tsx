@@ -1,5 +1,6 @@
 import React from 'react';
-import { MdCancel } from 'react-icons/md';
+import { MdCancel, MdRefresh, MdScreenLockLandscape } from 'react-icons/md';
+import { AsciiPayAuthenticationClient } from '../ascii-pay-authentication-client';
 import Money from '../components/Money';
 import Stamp from '../components/Stamp';
 import { useAppDispatch, useAppSelector } from '../store';
@@ -7,12 +8,25 @@ import { StampType } from '../types/graphql-global';
 import { removeAccount } from './paymentSlice';
 import './ScannedAccount.scss';
 
-export default function ScannedAccount() {
+export default function ScannedAccount(props: { authClient: AsciiPayAuthenticationClient }) {
   const scannedAccount = useAppSelector((state) => state.payment.scannedAccount);
   const dispatch = useAppDispatch();
 
+  const refresh = React.useCallback(() => {
+    props.authClient.requestAccountAccessToken();
+  }, [props.authClient]);
+
   if (scannedAccount === null) {
-    return <div className="scanned-account">No account scanned!</div>;
+    return (
+      <div className="scanned-account">
+        <div className="scanned-account-empty">
+          <span>Kein Konto erkannt!</span>
+          <div className="scanned-account-refresh" onClick={refresh}>
+            <MdRefresh />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

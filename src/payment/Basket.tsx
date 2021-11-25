@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../store';
 import { StampType } from '../types/graphql-global';
 import './Basket.scss';
 import {
+  clearPaymentItems,
   groupPaymentItems,
   PaymentItem,
   paymentItemEqual,
@@ -28,7 +29,7 @@ export default function Basket() {
   const dispatch = useAppDispatch();
 
   if (storedPaymentItems.length <= 0 && keypadValue === 0) {
-    return <div className="basket-empty">No entries!</div>;
+    return <div className="basket-empty">Warenkorb leer!</div>;
   }
 
   const paymentItemMap = groupPaymentItems(storedPaymentItems);
@@ -36,6 +37,9 @@ export default function Basket() {
   const onRemove = (item: PaymentItem) => {
     let i = findLastIndex(storedPaymentItems, (v) => paymentItemEqual(v, item));
     dispatch(removePaymentItemAtIndex(i));
+  };
+  const onClear = () => {
+    dispatch(clearPaymentItems());
   };
 
   let content: any = [];
@@ -124,6 +128,16 @@ export default function Basket() {
     );
 
     index += 1;
+  }
+
+  if (content.length >= 3) {
+    content.splice(
+      0,
+      0,
+      <div className="basket-delete-all" key="delete-all" onClick={onClear}>
+        <span>Warenkorb leeren</span>
+      </div>
+    );
   }
 
   return (

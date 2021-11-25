@@ -26,6 +26,11 @@
 
   border-left: solid 1px var(--border-color);
   background-color: var(--primary-background);
+
+  & > div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
 }
 
 .basket-entry {
@@ -164,5 +169,17 @@
 
   &:hover {
     background-color: var(--secondary-hover-background);
+  }
+}
+
+.basket-delete-all {
+  text-align: center;
+  padding: 0.2rem 0;
+
+  span {
+    display: block;
+    border: solid 1px var(--border-color);
+    background-color: var(--secondary-background);
+    padding: 0.4rem 2rem;
   }
 }

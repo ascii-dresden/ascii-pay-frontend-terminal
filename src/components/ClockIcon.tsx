@@ -20,10 +20,10 @@ export default function ClockIcon() {
         value={today}
         hourHandLength={50}
         hourHandOppositeLength={8}
-        hourHandWidth={3}
+        hourHandWidth={4}
         minuteHandLength={70}
         minuteHandOppositeLength={8}
-        minuteHandWidth={2.5}
+        minuteHandWidth={3}
         renderHourMarks={false}
         renderMinuteMarks={false}
         renderSecondHand={false}

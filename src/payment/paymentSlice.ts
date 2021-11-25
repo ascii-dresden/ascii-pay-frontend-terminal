@@ -479,6 +479,13 @@ export const paymentSlice = createSlice({
       state.paymentCoffeeStamps = total.coffeeStamps;
       state.paymentBottleStamps = total.bottleStamps;
     },
+    clearPaymentItems: (state) => {
+      state.storedPaymentItems = [];
+      const total = calculateTotal([]);
+      state.paymentTotal = total.total;
+      state.paymentCoffeeStamps = total.coffeeStamps;
+      state.paymentBottleStamps = total.bottleStamps;
+    },
     setPaymentItemStamps: (
       state,
       action: PayloadAction<{
@@ -652,6 +659,7 @@ export const {
   addProduct,
   addPaymentItem,
   removePaymentItemAtIndex,
+  clearPaymentItems,
   setPaymentItemStamps,
   setScreensaver,
   showNotification,
