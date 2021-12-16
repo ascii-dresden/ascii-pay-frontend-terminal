@@ -82,15 +82,79 @@ export default function CoinBox() {
   const previousCoinBox = useAppSelector((state) => state.register.previous?.coinBox);
   const dispatch = useAppDispatch();
 
-  const [selectedGroup, setSelectedGroup] = useState(null as number | null);
-  const [currentDiff, setCurrentDiff] = useState(0);
+  const [selectedGroup, setSelectedGroup] = useState(
+    null as { cents: number; count: number; top: number; height: number; offset: number } | null
+  );
 
-  const handlePanStart = (event: HammerInput) => {
+  const getCoinCount = (cents: number) => {
+    switch (cents) {
+      case 200:
+        return coinBox.coin200;
+      case 100:
+        return coinBox.coin100;
+      case 50:
+        return coinBox.coin50;
+      case 20:
+        return coinBox.coin20;
+      case 10:
+        return coinBox.coin10;
+      case 5:
+        return coinBox.coin5;
+      case 2:
+        return coinBox.coin2;
+      case 1:
+        return coinBox.coin1;
+    }
+    return 0;
+  };
+
+  const setCoinCount = (cents: number, count: number) => {
+    if (isNaN(count) || !isFinite(count)) {
+      count = 0;
+    }
+
+    switch (cents) {
+      case 200:
+        dispatch(setCoin200(count));
+        break;
+      case 100:
+        dispatch(setCoin100(count));
+        break;
+      case 50:
+        dispatch(setCoin50(count));
+        break;
+      case 20:
+        dispatch(setCoin20(count));
+        break;
+      case 10:
+        dispatch(setCoin10(count));
+        break;
+      case 5:
+        dispatch(setCoin5(count));
+        break;
+      case 2:
+        dispatch(setCoin2(count));
+        break;
+      case 1:
+        dispatch(setCoin1(count));
+        break;
+    }
+  };
+
+  const handleTab = (event: HammerInput) => {
     if (previousCoinBox) return;
     let currentElement: HTMLElement | null = event.target;
     let targetCents = 0;
+    let targetCentCount = 0;
+    let targetTop = 0;
+    let targetHeight = 0;
 
     while (currentElement != null) {
+      if (currentElement.classList.contains('coin-stack-group')) {
+        targetTop = currentElement.offsetTop;
+        targetHeight = currentElement.clientHeight;
+        targetCentCount = currentElement.getElementsByClassName('coin').length;
+      }
       if (currentElement.classList.contains('coin-group')) {
         targetCents = parseInt(currentElement.dataset['value'] ?? '0');
         break;
@@ -99,52 +163,102 @@ export default function CoinBox() {
     }
 
     if (targetCents !== 0) {
-      setSelectedGroup(targetCents);
+      let newCount = targetCentCount - Math.round(((event.center.y - targetTop) / targetHeight) * targetCentCount);
+      setCoinCount(targetCents, newCount);
     }
   };
+
+  const handlePress = (event: HammerInput) => {
+    if (previousCoinBox) return;
+    let currentElement: HTMLElement | null = event.target;
+    let targetCents = 0;
+    let targetCentCount = 0;
+    let targetTop = 0;
+    let targetHeight = 0;
+
+    while (currentElement != null) {
+      if (currentElement.classList.contains('coin-stack-group')) {
+        targetTop = currentElement.offsetTop;
+        targetHeight = currentElement.clientHeight;
+        targetCentCount = currentElement.getElementsByClassName('coin').length;
+      }
+      if (currentElement.classList.contains('coin-group')) {
+        targetCents = parseInt(currentElement.dataset['value'] ?? '0');
+        break;
+      }
+      currentElement = currentElement.parentElement;
+    }
+
+    if (targetCents !== 0) {
+      let newCount = targetCentCount - Math.round(((event.center.y - targetTop) / targetHeight) * targetCentCount);
+      setCoinCount(targetCents, newCount);
+
+      setSelectedGroup({
+        cents: targetCents,
+        count: targetCentCount,
+        top: targetTop,
+        height: targetHeight,
+        offset: 0,
+      });
+    }
+  };
+
+  const handlePanStart = (event: HammerInput) => {
+    if (previousCoinBox) return;
+    let currentElement: HTMLElement | null = event.target;
+    let targetCents = 0;
+    let targetCentCount = 0;
+    let targetTop = 0;
+    let targetHeight = 0;
+
+    while (currentElement != null) {
+      if (currentElement.classList.contains('coin-stack-group')) {
+        targetTop = currentElement.offsetTop;
+        targetHeight = currentElement.clientHeight;
+        targetCentCount = currentElement.getElementsByClassName('coin').length;
+      }
+      if (currentElement.classList.contains('coin-group')) {
+        targetCents = parseInt(currentElement.dataset['value'] ?? '0');
+        break;
+      }
+      currentElement = currentElement.parentElement;
+    }
+
+    if (targetCents !== 0) {
+      let currentCount = getCoinCount(targetCents);
+      let newCount = targetCentCount - Math.round(((event.center.y - targetTop) / targetHeight) * targetCentCount);
+
+      setSelectedGroup({
+        cents: targetCents,
+        count: targetCentCount,
+        top: targetTop,
+        height: targetHeight,
+        offset: newCount - currentCount,
+      });
+    }
+  };
+
   const handlePan = (event: HammerInput) => {
     if (previousCoinBox) return;
-    let diff = (currentDiff - event.velocityY) * 2;
-    setCurrentDiff(diff);
 
-    let intDiff = 0;
-    if (diff >= 1) {
-      intDiff = Math.floor(diff);
-    } else if (diff <= -1) {
-      intDiff = Math.ceil(diff);
-    }
-    setCurrentDiff(diff - intDiff);
+    if (selectedGroup) {
+      let newCount =
+        selectedGroup.count -
+        Math.round(((event.center.y - selectedGroup.top) / selectedGroup.height) * selectedGroup.count) -
+        selectedGroup.offset;
 
-    switch (selectedGroup) {
-      case 200:
-        dispatch(setCoin200(coinBox.coin200 + intDiff));
-        break;
-      case 100:
-        dispatch(setCoin100(coinBox.coin100 + intDiff));
-        break;
-      case 50:
-        dispatch(setCoin50(coinBox.coin50 + intDiff));
-        break;
-      case 20:
-        dispatch(setCoin20(coinBox.coin20 + intDiff));
-        break;
-      case 10:
-        dispatch(setCoin10(coinBox.coin10 + intDiff));
-        break;
-      case 5:
-        dispatch(setCoin5(coinBox.coin5 + intDiff));
-        break;
-      case 2:
-        dispatch(setCoin2(coinBox.coin2 + intDiff));
-        break;
-      case 1:
-        dispatch(setCoin1(coinBox.coin1 + intDiff));
-        break;
+      setCoinCount(selectedGroup.cents, newCount);
     }
   };
 
   return (
-    <Hammer direction={'DIRECTION_ALL'} onPanStart={handlePanStart} onPan={handlePan}>
+    <Hammer
+      direction={'DIRECTION_ALL'}
+      onTap={handleTab}
+      onPress={handlePress}
+      onPanStart={handlePanStart}
+      onPan={handlePan}
+    >
       <div className="coin-box">
         <div>
           <CoinGroup

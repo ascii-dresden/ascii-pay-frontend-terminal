@@ -22,7 +22,7 @@
 
 .note-stack-group {
   width: 100%;
-  height: 24.8rem;
+  height: 25.7rem;
   position: relative;
   display: flex;
   flex-direction: column-reverse;
@@ -34,6 +34,7 @@
   width: 8rem;
   height: 4rem;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  transition: margin-bottom 0.4s, filter 0.4s;
 
   img {
     width: 100%;
@@ -78,3 +79,17 @@
     font-size: 0.8rem;
   }
 }
+
+// Group notes in stacks of 5
+// .note-bundle:not(:last-of-type):not(:nth-last-of-type(1)):not(:nth-last-of-type(2)):not(:nth-last-of-type(3)):not(:nth-last-of-type(4)) {
+//   & + .note,
+//   & + .note + .note,
+//   & + .note + .note + .note,
+//   & + .note + .note + .note + .note {
+//     margin-bottom: -3.9rem !important;
+//   }
+
+//   & + .note + .note + .note + .note + .note {
+//     margin-bottom: -2.5rem !important;
+//   }
+// }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdCancel, MdRefresh, MdScreenLockLandscape } from 'react-icons/md';
+import { MdCancel, MdRefresh } from 'react-icons/md';
 import { AsciiPayAuthenticationClient } from '../ascii-pay-authentication-client';
 import Money from '../components/Money';
 import Stamp from '../components/Stamp';
