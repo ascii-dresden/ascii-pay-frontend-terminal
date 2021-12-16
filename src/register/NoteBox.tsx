@@ -112,7 +112,7 @@ export default function NoteBox() {
       currentElement = currentElement.parentElement;
     }
 
-    if (targetCents !== 0) {
+    if (targetCents !== 0 && targetHeight !== 0) {
       let noteHeight = document.getElementsByClassName('note')[0].clientHeight;
       let newCount = Math.round((targetHeight - (event.center.y - targetTop) - noteHeight * 0.5) / (noteHeight * 0.25));
       setNoteCount(targetCents, newCount);
@@ -137,7 +137,7 @@ export default function NoteBox() {
       currentElement = currentElement.parentElement;
     }
 
-    if (targetCents !== 0) {
+    if (targetCents !== 0 && targetHeight !== 0) {
       let noteHeight = document.getElementsByClassName('note')[0].clientHeight;
       let newCount = Math.round((targetHeight - (event.center.y - targetTop) - noteHeight * 0.5) / (noteHeight * 0.25));
       setNoteCount(targetCents, newCount);
@@ -170,7 +170,7 @@ export default function NoteBox() {
       currentElement = currentElement.parentElement;
     }
 
-    if (targetCents !== 0) {
+    if (targetCents !== 0 && targetHeight !== 0) {
       let noteHeight = document.getElementsByClassName('note')[0].clientHeight;
       let currentCount = getNoteCount(targetCents);
       let newCount = Math.round((targetHeight - (event.center.y - targetTop) - noteHeight * 0.5) / (noteHeight * 0.25));

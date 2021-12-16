@@ -162,7 +162,7 @@ export default function CoinBox() {
       currentElement = currentElement.parentElement;
     }
 
-    if (targetCents !== 0) {
+    if (targetCents !== 0 && targetHeight !== 0) {
       let newCount = targetCentCount - Math.round(((event.center.y - targetTop) / targetHeight) * targetCentCount);
       setCoinCount(targetCents, newCount);
     }
@@ -189,7 +189,7 @@ export default function CoinBox() {
       currentElement = currentElement.parentElement;
     }
 
-    if (targetCents !== 0) {
+    if (targetCents !== 0 && targetHeight !== 0) {
       let newCount = targetCentCount - Math.round(((event.center.y - targetTop) / targetHeight) * targetCentCount);
       setCoinCount(targetCents, newCount);
 
@@ -224,7 +224,7 @@ export default function CoinBox() {
       currentElement = currentElement.parentElement;
     }
 
-    if (targetCents !== 0) {
+    if (targetCents !== 0 && targetHeight !== 0) {
       let currentCount = getCoinCount(targetCents);
       let newCount = targetCentCount - Math.round(((event.center.y - targetTop) / targetHeight) * targetCentCount);
 
