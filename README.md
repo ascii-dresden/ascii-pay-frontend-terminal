@@ -11,5 +11,6 @@ ionic serve
 
 ```sh
 npm install
+ionic cap sync
 ionic cap open android
 ```

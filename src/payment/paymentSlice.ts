@@ -1,9 +1,10 @@
 import { ApolloClient } from '@apollo/client';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { GET_ACCOUNT_BY_ACCESS_TOKEN, TRANSACTION } from '../graphql';
+import { GET_ACCOUNT_BY_ACCESS_TOKEN, GET_PRODUCT, TRANSACTION } from '../graphql';
 import { AppDispatch, RootState } from '../store';
 import { StampType } from '../types/graphql-global';
 import { getAccountByAccessToken, getAccountByAccessTokenVariables } from '../__generated__/getAccountByAccessToken';
+import { getProduct, getProductVariables } from '../__generated__/getProduct';
 import { transaction, transactionVariables } from '../__generated__/transaction';
 
 export interface PaymentAccount {
@@ -382,6 +383,54 @@ export const receiveAccountAccessToken = createAsyncThunk<
   return await onReceiveAccountAccessToken(query.accessToken, state, query.apollo);
 });
 
+async function onProductScanned(
+  product_id: string,
+  state: PaymentState,
+  apollo: ApolloClient<object>
+): Promise<PaymentProduct | null> {
+  if (state.payment) {
+    return null;
+  }
+
+  let result = await apollo.query<getProduct, getProductVariables>({
+    query: GET_PRODUCT,
+    variables: {
+      product_id: product_id,
+    },
+  });
+
+  if (result.errors || !result.data) {
+    return null;
+  } else {
+    let data = result.data.getProduct;
+
+    return {
+      id: data.id,
+      name: data.name,
+      image: data.image,
+      price: data.price,
+      payWithStamps: data.payWithStamps,
+      giveStamps: data.giveStamps,
+    };
+  }
+}
+
+export const productScanned = createAsyncThunk<
+  PaymentProduct | null,
+  {
+    apollo: ApolloClient<object>;
+    product_id: string;
+  },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('payment/productScanned', async (query, thunkApi) => {
+  const state = thunkApi.getState().payment;
+
+  return await onProductScanned(query.product_id, state, query.apollo);
+});
+
 function trimPrefix(str: string, prefix: string) {
   if (str.startsWith(prefix)) {
     return str.slice(prefix.length);
@@ -648,6 +697,24 @@ export const paymentSlice = createSlice({
           bottleStamps: state.payment.bottleStamps,
           items: state.payment.items,
         };
+      }
+    });
+    builder.addCase(productScanned.fulfilled, (state, action) => {
+      if (action.payload) {
+        const items = state.storedPaymentItems.slice();
+        items.push({
+          price: action.payload.price,
+          payWithStamps: action.payload.payWithStamps,
+          couldBePaidWithStamps: StampType.NONE,
+          giveStamps: action.payload.giveStamps,
+          product: action.payload,
+        });
+        state.storedPaymentItems = items;
+
+        const total = calculateTotal(items);
+        state.paymentTotal = total.total;
+        state.paymentCoffeeStamps = total.coffeeStamps;
+        state.paymentBottleStamps = total.bottleStamps;
       }
     });
   },

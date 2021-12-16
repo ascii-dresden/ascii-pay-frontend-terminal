@@ -63,19 +63,19 @@ export default function StartPage() {
         <div className="start-page-menu">
           <div className="start-page-entry" onClick={handleOpenPayment}>
             <MdShoppingCart />
-            <span>Payment</span>
-          </div>
-          <div className="start-page-entry" onClick={handleOpenAccounts}>
-            <MdPeople />
-            <span>Accounts</span>
+            <span>Bezahlen</span>
           </div>
           <div className="start-page-entry" onClick={handleOpenRegister}>
             <MdLocalAtm />
-            <span>Count register</span>
+            <span>Kasse zählen</span>
+          </div>
+          <div className="start-page-entry" onClick={handleOpenAccounts}>
+            <MdPeople />
+            <span>Kontoverwaltung</span>
           </div>
           <div className="start-page-entry" onClick={handleOpenSettings}>
             <MdSettings />
-            <span>Settings</span>
+            <span>Einstellungen</span>
           </div>
         </div>
       </div>

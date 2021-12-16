@@ -160,3 +160,21 @@ export const GET_PRODUCTS = gql`
     }
   }
 `;
+
+export const GET_PRODUCT = gql`
+  query getProduct($product_id: String!) {
+    getProduct(id: $product_id) {
+      id
+      name
+      nickname
+      price
+      payWithStamps
+      giveStamps
+      image
+      flags
+      category {
+        name
+      }
+    }
+  }
+`;

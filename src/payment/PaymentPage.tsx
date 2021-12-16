@@ -20,6 +20,7 @@ import './PaymentPage.scss';
 import {
   cancelPayment,
   payment,
+  productScanned,
   receiveAccountAccessToken,
   removeAccount,
   setKeypadValue,
@@ -104,6 +105,15 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
     },
     onNfcCardRemoved() {
       dispatch(removeAccount());
+      return true;
+    },
+    onFoundProductId(product_id: string) {
+      dispatch(
+        productScanned({
+          apollo: client,
+          product_id: product_id,
+        })
+      );
       return true;
     },
   };
