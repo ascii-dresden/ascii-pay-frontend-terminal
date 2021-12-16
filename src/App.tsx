@@ -29,6 +29,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
     document.documentElement.style.fontSize = Math.round(16 * scale) + 'px';
   };
 
+  onresize();
   useEffect(() => {
     window.addEventListener('resize', onresize);
     return () => {

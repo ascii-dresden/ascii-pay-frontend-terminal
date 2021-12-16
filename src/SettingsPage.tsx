@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './SettingsPage.scss';
 import SidebarPage from './components/SidebarPage';
 import { AsciiPayAuthenticationClient, WebSocketMessageHandler } from './ascii-pay-authentication-client';
 
 const colors = ['teal', 'green', 'blue', 'purple', 'yellow', 'orange', 'red'];
+
+export const useWindowSize = () => {
+  function getSize() {
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+  }
+
+  const [windowSize, setWindowSize] = useState(getSize);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize(getSize());
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowSize;
+};
 
 export default function SettingsPage(props: { authClient: AsciiPayAuthenticationClient }) {
   const history = useHistory();
@@ -21,6 +42,8 @@ export default function SettingsPage(props: { authClient: AsciiPayAuthentication
     document.body.dataset['highlight'] = highlightColor;
     localStorage.setItem('highlight-color', highlightColor);
   }, [highlightColor]);
+
+  const windowSize = useWindowSize();
 
   const [statusInformation, setStatusInformation] = React.useState('');
   const handler: WebSocketMessageHandler = {
@@ -84,6 +107,10 @@ export default function SettingsPage(props: { authClient: AsciiPayAuthentication
           </div>
           <div>
             <div>
+              <span>Window size</span>
+              <div>
+                {windowSize.width}x{windowSize.height}
+              </div>
               <span>Proxy status</span>
               <div className="settings-item settings-proxy-status">
                 <code>{statusInformation}</code>
