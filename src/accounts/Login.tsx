@@ -2,7 +2,7 @@ import { useApolloClient, useMutation } from '@apollo/client';
 import React, { useCallback, useState } from 'react';
 import { SiContactlesspayment } from 'react-icons/si';
 import { AsciiPayAuthenticationClient, WebSocketMessageHandler } from '../ascii-pay-authentication-client';
-import { GET_SELF, LOGIN } from '../graphql';
+import { GET_ACCOUNT, LOGIN } from '../graphql';
 import { login, loginVariables } from '../__generated__/login';
 import './Login.scss';
 
@@ -31,7 +31,7 @@ export default function Login(props: { authClient: AsciiPayAuthenticationClient 
   if (data) {
     localStorage['token'] = data.login.token;
     client.refetchQueries({
-      include: [GET_SELF],
+      include: [GET_ACCOUNT],
     });
   }
 

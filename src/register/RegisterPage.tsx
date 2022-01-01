@@ -32,25 +32,25 @@ export default function RegisterPage() {
 
   const sidebarContent: SidebarAction[] = [
     {
-      title: 'Open coin counting view',
+      title: 'Münzeingabe',
       element: <MdEuroSymbol />,
       action: () => dispatch(setRegisterMode(RegisterMode.COINS)),
       active: registerMode === RegisterMode.COINS,
     },
     {
-      title: 'Open note counting view',
+      title: 'Scheineingabe',
       element: <MdLocalAtm />,
       action: () => dispatch(setRegisterMode(RegisterMode.NOTES)),
       active: registerMode === RegisterMode.NOTES,
     },
     {
-      title: 'Open result view',
+      title: 'Übersicht',
       element: <MdMailOutline />,
       action: () => dispatch(setRegisterMode(RegisterMode.RESULT)),
       active: registerMode === RegisterMode.RESULT,
     },
     {
-      title: 'Calculate result',
+      title: 'Berechnungsmodus',
       element: <MdDone />,
       action: () => dispatch(toggleResultMode()),
       active: !!previous,

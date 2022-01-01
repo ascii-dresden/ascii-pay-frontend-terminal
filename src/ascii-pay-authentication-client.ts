@@ -49,6 +49,9 @@ type FoundAccountAccessToken = {
 type NfcCardRemoved = {
   type: 'NfcCardRemoved';
 };
+type RegisterNfcCardSuccessful = {
+  type: 'RegisterNfcCardSuccessful';
+};
 type StatusInformation = {
   type: 'StatusInformation';
   payload: {
@@ -69,6 +72,7 @@ export type WebSocketResponse =
   | FoundProductId
   | FoundAccountAccessToken
   | NfcCardRemoved
+  | RegisterNfcCardSuccessful
   | StatusInformation
   | Error;
 
@@ -81,6 +85,7 @@ export interface WebSocketMessageHandler {
   onFoundProductId?(product_id: string): void | boolean;
   onFoundAccountAccessToken?(accessToken: string): void | boolean;
   onNfcCardRemoved?(): void | boolean;
+  onRegisterNfcCardSuccessful?(): void | boolean;
   onStatusInformation?(status: string): void | boolean;
   onError?(source: string, message: string): void | boolean;
 }
@@ -112,6 +117,9 @@ function dispatchMessage(message: WebSocketResponse, handler: WebSocketMessageHa
       break;
     case 'NfcCardRemoved':
       consumeType = (handler.onNfcCardRemoved && handler.onNfcCardRemoved()) || consumeType;
+      break;
+    case 'RegisterNfcCardSuccessful':
+      consumeType = (handler.onRegisterNfcCardSuccessful && handler.onRegisterNfcCardSuccessful()) || consumeType;
       break;
     case 'StatusInformation':
       consumeType = (handler.onStatusInformation && handler.onStatusInformation(message.payload.status)) || consumeType;

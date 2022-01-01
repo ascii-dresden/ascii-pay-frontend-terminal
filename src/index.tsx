@@ -13,10 +13,10 @@ import { AsciiPayAuthenticationClient } from './ascii-pay-authentication-client'
 import { setScreensaver } from './payment/paymentSlice';
 import NotificationManager from './components/NotificationManager';
 
-export const SERVER_URI = 'https://pay.ascii.coffee';
+// export const SERVER_URI = 'https://pay.ascii.coffee';
 
-// export const SERVER_URI = 'http://127.0.0.1:8080';
-export const PROXY_URI = 'ws://10.3.141.1:9001/';
+export const SERVER_URI = 'http://secure-pay.ascii.local';
+export const PROXY_URI = 'ws://127.0.0.1:9001/';
 
 const httpLink = createHttpLink({
   uri: SERVER_URI + '/api/v1/graphql',

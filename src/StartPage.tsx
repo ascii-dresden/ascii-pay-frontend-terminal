@@ -23,7 +23,7 @@ const useDate = () => {
   const time = today.toLocaleTimeString(locale, { hour: 'numeric', hour12: false, minute: 'numeric' });
 
   const hour = today.getHours();
-  const wish = `Good ${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}`;
+  const wish = `Guten ${(hour < 12 && 'Morgen') || (hour < 17 && 'Tag') || 'Abend'}`;
 
   return {
     date: `${date} ${time}`,

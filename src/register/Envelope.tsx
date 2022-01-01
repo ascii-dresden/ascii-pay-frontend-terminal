@@ -15,7 +15,7 @@ export default function Envelope() {
     return (
       <div className="envelope empty">
         <MdArrowBack />
-        <span>Start calculation to view result values!</span>
+        <span>Starte Berechnung um Übersicht zu sehen!</span>
       </div>
     );
   }
@@ -31,7 +31,7 @@ export default function Envelope() {
   return (
     <div className="envelope">
       <div className="cash-book">
-        <span>Cash book entries</span>
+        <span>Kassenbuch</span>
         <div className="cash-book-list">
           <Money value={previousTotal} />
           <Money value={previousTotal - currentTotal} />
@@ -57,25 +57,25 @@ export default function Envelope() {
 
       <div className="envelope-columns">
         <div>
-          <span>Label</span>
+          <span>Briefumschlag</span>
           <div>
             <div>
               <span>Name</span>
-              <span className="secondary">Your Name</span>
+              <span className="secondary">Dein Name</span>
             </div>
             <div>
-              <span>Date</span>
+              <span>Datum</span>
               <span>{date}</span>
             </div>
             <div>
-              <span>Total</span>
+              <span>Summe</span>
               <Money value={previousTotal - currentTotal} />
             </div>
           </div>
         </div>
 
         <div>
-          <span>Coins</span>
+          <span>Münzen</span>
           <div>
             <div>
               <span>2 EURO</span>
@@ -113,7 +113,7 @@ export default function Envelope() {
         </div>
 
         <div>
-          <span>Notes</span>
+          <span>Scheine</span>
           <div>
             <div>
               <span>100 EURO</span>

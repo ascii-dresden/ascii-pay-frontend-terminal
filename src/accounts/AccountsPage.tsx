@@ -4,7 +4,7 @@ import { MdExitToApp, MdPeople, MdShowChart } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
 import { AsciiPayAuthenticationClient } from '../ascii-pay-authentication-client';
 import Sidebar, { SidebarAction } from '../components/SidebarPage';
-import { GET_SELF, LOGOUT } from '../graphql';
+import { GET_ACCOUNT, LOGOUT } from '../graphql';
 import { AccountOutput } from '../model';
 import { logout } from '../__generated__/logout';
 import AccountDetails from './AccountDetails';
@@ -31,7 +31,7 @@ export default function AccountsPage(props: { authClient: AsciiPayAuthentication
     history.goBack();
   };
 
-  const { loading, error, data } = useQuery(GET_SELF, {
+  const { loading, error, data } = useQuery(GET_ACCOUNT, {
     fetchPolicy: 'network-only',
   });
 
@@ -53,11 +53,11 @@ export default function AccountsPage(props: { authClient: AsciiPayAuthentication
   if (logoutData) {
     localStorage['token'] = '';
     client.refetchQueries({
-      include: [GET_SELF],
+      include: [GET_ACCOUNT],
     });
   }
 
-  const account = data.getSelf as AccountOutput;
+  const account = data.getAccount as AccountOutput;
   const logout = () => {
     logoutFunction().catch(() => {
       // login failed

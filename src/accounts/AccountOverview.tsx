@@ -1,24 +1,24 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import moment, { Moment } from 'moment';
-import { GET_OWN_TRANSACTIONS } from '../graphql';
-import { getOwnTransactions, getOwnTransactionsVariables } from '../__generated__/getOwnTransactions';
+import { GET_TRANSACTIONS } from '../graphql';
+import { getTransactions, getTransactionsVariables } from '../__generated__/getTransactions';
 import AccountChart, { DiagramData } from './AccountChart';
 
 import './AccountOverview.scss';
 
 function useTransactionData(from: Moment, to: Moment) {
-  const { data: transactionRawData, loading: transactionLoading } = useQuery<
-    getOwnTransactions,
-    getOwnTransactionsVariables
-  >(GET_OWN_TRANSACTIONS, {
-    variables: {
-      transactionFilterFrom: from.format('YYYY-MM-DD'),
-      transactionFilterTo: to.format('YYYY-MM-DD'),
-    },
-  });
+  const { data: transactionRawData, loading: transactionLoading } = useQuery<getTransactions, getTransactionsVariables>(
+    GET_TRANSACTIONS,
+    {
+      variables: {
+        transactionFilterFrom: from.format('YYYY-MM-DD'),
+        transactionFilterTo: to.format('YYYY-MM-DD'),
+      },
+    }
+  );
 
-  const transactionData = (transactionRawData?.getOwnTransactions ?? []).slice();
+  const transactionData = (transactionRawData?.getTransactions ?? []).slice();
   transactionData.reverse();
   return { transactionLoading, transactionData };
 }

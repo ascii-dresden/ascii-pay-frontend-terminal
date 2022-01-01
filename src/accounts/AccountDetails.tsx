@@ -1,13 +1,18 @@
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
+import { MdDelete } from 'react-icons/md';
 import { AsciiPayAuthenticationClient, WebSocketMessageHandler } from '../ascii-pay-authentication-client';
 import Dialog from '../components/Dialog';
-import { GET_ACCOUNT } from '../graphql';
+import { DELETE_ACCOUNT_NFC_CARD, GET_ACCOUNT, SET_ACCOUNT_NUMBER } from '../graphql';
 import { Permission } from '../types/graphql-global';
+import { deleteAccountNfcCard, deleteAccountNfcCardVariables } from '../__generated__/deleteAccountNfcCard';
 import { getAccount, getAccountVariables, getAccount_getAccount } from '../__generated__/getAccount';
+import { setAccountNumber, setAccountNumberVariables } from '../__generated__/setAccountNumber';
 import './AccountDetails.scss';
 
 export default function AccountDetails(props: { id: string; authClient: AsciiPayAuthenticationClient }) {
+  const client = useApolloClient();
+
   const { loading, error, data } = useQuery<getAccount, getAccountVariables>(GET_ACCOUNT, {
     fetchPolicy: 'network-only',
     variables: {
@@ -26,10 +31,19 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
   let account: getAccount_getAccount = {
     __typename: 'AccountOutput',
     id: '',
+    credit: 0,
+    minimumCredit: 0,
+    bottleStamps: 0,
+    coffeeStamps: 0,
     name: '',
+    mail: '',
     username: '',
     accountNumber: '',
     permission: Permission.DEFAULT,
+    useDigitalStamps: false,
+    receivesMonthlyReport: false,
+    isPasswordSet: false,
+    nfcTokens: [],
   };
   if (!loading && !error && data) {
     account = data.getAccount;
@@ -49,6 +63,12 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
       setRegisterAccountNumber(accountNumber);
       return true;
     },
+    onRegisterNfcCardSuccessful() {
+      client.refetchQueries({
+        include: [GET_ACCOUNT],
+      });
+      return true;
+    },
     onNfcCardRemoved() {
       setRegisterNfc(null);
       return true;
@@ -62,21 +82,45 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
     // eslint-disable-next-line
   }, [props.authClient]);
 
-  // const setAccountNumber = useCallback(
-  //   (id: string, accountNumber: string) => {
+  let registerAccountNumberCallback = (accountNumber: string) => {
+    (async () => {
+      try {
+        await client.mutate<setAccountNumber, setAccountNumberVariables>({
+          mutation: SET_ACCOUNT_NUMBER,
+          variables: {
+            id: props.id,
+            accountNumber,
+          },
+        });
 
-  //     mutateFunction({
-  //       variables: {
-  //         username: username,
-  //         password: password,
-  //         accountAccessToken: null,
-  //       },
-  //     }).catch(() => {
-  //       // login failed
-  //     });
-  //   },
-  //   [mutateFunction]
-  // );
+        client.refetchQueries({
+          include: [GET_ACCOUNT],
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  };
+
+  let removeNfcToken = (cardId: string) => {
+    (async () => {
+      try {
+        await client.mutate<deleteAccountNfcCard, deleteAccountNfcCardVariables>({
+          mutation: DELETE_ACCOUNT_NFC_CARD,
+          variables: {
+            id: props.id,
+            cardId,
+          },
+        });
+
+        client.refetchQueries({
+          include: [GET_ACCOUNT],
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  };
 
   let addView = <></>;
   if (registerNfc && account.id) {
@@ -117,7 +161,7 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
         label: 'Register account number',
         action: () => {
           if (account.id) {
-            // TODO
+            registerAccountNumberCallback(registerAccountNumber);
             setRegisterAccountNumber(null);
           }
         },
@@ -141,6 +185,18 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
     );
   }
 
+  let nfc = account.nfcTokens.map((token) => (
+    <div key={token.cardId}>
+      <label>NFC Token</label>
+      <div className="input-group">
+        <input readOnly={true} value={token.name + ": '" + token.cardId + "'"} />
+        <button style={{ width: '4rem' }} onClick={() => removeNfcToken(token.cardId)}>
+          <MdDelete />
+        </button>
+      </div>
+    </div>
+  ));
+
   return (
     <div className="account-details form">
       <div>
@@ -159,6 +215,7 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
         <label>Permission</label>
         <input readOnly={true} value={account.permission || ''} />
       </div>
+      {nfc}
       {addView}
     </div>
   );

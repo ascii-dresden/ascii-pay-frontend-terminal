@@ -64,7 +64,12 @@ export default function Keyboard() {
 
   const bodyOnFocusHandler = (event: FocusEvent) => {
     let activeElement = document.activeElement;
-    if (activeElement && activeElement.tagName === 'INPUT' && activeElement !== focusedElement) {
+    if (
+      activeElement &&
+      activeElement.tagName === 'INPUT' &&
+      activeElement !== focusedElement &&
+      !(activeElement as HTMLInputElement).readOnly
+    ) {
       let v = activeElement as HTMLInputElement;
       v.setSelectionRange(v.value.length, v.value.length);
       setValue({

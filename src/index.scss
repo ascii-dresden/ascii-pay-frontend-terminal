@@ -169,10 +169,10 @@ code {
     }
 
     &:read-only {
-      background-color: var(--secondary-background);
+      background-color: var(--secondary-hover-background);
 
       &:hover {
-        background-color: var(--secondary-hover-background);
+        background-color: var(--primary-background);
       }
     }
 
@@ -212,5 +212,13 @@ code {
         background-color: var(--tertiary-hover-background);
       }
     }
+  }
+}
+
+.input-group {
+  display: flex;
+
+  & > :not(:last-child) {
+    border-right: none;
   }
 }
