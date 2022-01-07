@@ -51,13 +51,13 @@ export default function ProductList() {
   const ordering = (name: string): number => {
     switch (name) {
       case 'Heißgetränke':
-        return 0;
+        return 2;
       case 'Kaltgetränke 0,5l':
         return 0;
       case 'Kaltgetränke 0,33l':
-        return 0;
+        return 1;
       case 'Snacks':
-        return 0;
+        return 3;
       default:
         return 999;
     }

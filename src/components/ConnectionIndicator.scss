@@ -1,0 +1,54 @@
+.connection-indicator {
+  position: absolute;
+  top: -0.5rem;
+  left: 0;
+  width: 100%;
+  height: 0.4rem;
+  text-align: center;
+  background-color: var(--error-color);
+  color: var(--error-text-color);
+  z-index: 1000;
+  transition: top 0.5s ease 2s, background-color 0.5s, color 0.5s;
+
+  display: flex;
+  justify-content: center;
+
+  div {
+    position: relative;
+    top: -1rem;
+    transition: top 0.5s ease 2s, border-color 0.5s;
+
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    border-top: 1.5rem solid var(--error-color);
+  }
+
+  span {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    margin-top: -1.5rem;
+    position: relative;
+    display: block;
+    width: 14.8rem;
+    text-align: center;
+  }
+
+  &.connected {
+    background-color: var(--success-color);
+    color: var(--success-text-color);
+
+    div {
+      border-top-color: var(--success-color);
+    }
+  }
+
+  &.disconnected {
+    top: 0;
+    transition: top 0.5s ease 0s;
+
+    div {
+      top: 0;
+      transition: top 0.5s ease 0s;
+    }
+  }
+}

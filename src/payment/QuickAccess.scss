@@ -136,4 +136,7 @@ body[data-theme='dark'] {
 .quick-access-entry-stamp {
   display: flex;
   align-items: center;
+  img {
+    margin-left: 0.4rem;
+  }
 }

@@ -135,15 +135,15 @@ function QuickAccessEntryView(props: { entry: QuickAccessEntry }) {
   if (props.entry.payWithStamps === StampType.COFFEE) {
     stemp = (
       <div key="coffee-10" className="quick-access-entry-stamp">
-        <img id="coffee-stamp" src="/kaffe_stempel_icons.svg" alt="" />
         <span>-10</span>
+        <img id="coffee-stamp" src="/kaffe_stempel_icons.svg" alt="" />
       </div>
     );
   } else if (props.entry.payWithStamps === StampType.BOTTLE) {
     stemp = (
       <div key="bottle-10" className="quick-access-entry-stamp">
-        <img id="bottle-stamp" src="/getraeke_stempel_icons.svg" alt="" />
         <span>-10</span>
+        <img id="bottle-stamp" src="/getraeke_stempel_icons.svg" alt="" />
       </div>
     );
   }

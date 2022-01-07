@@ -12,6 +12,7 @@ import Screensaver from './components/Screensaver';
 import { AsciiPayAuthenticationClient } from './ascii-pay-authentication-client';
 import { setScreensaver } from './payment/paymentSlice';
 import NotificationManager from './components/NotificationManager';
+import ConnectionIndicator from './components/ConnectionIndicator';
 
 // export const SERVER_URI = 'https://pay.ascii.coffee';
 
@@ -41,6 +42,7 @@ document.body.dataset['theme'] = localStorage.getItem('dark-mode') === 'true' ? 
 document.body.dataset['highlight'] = localStorage.getItem('highlight-color') || 'blue';
 
 const authClient = new AsciiPayAuthenticationClient(PROXY_URI);
+(document as any).authClient = authClient;
 
 document.body.addEventListener('click', () => {
   store.dispatch(setScreensaver(false));
@@ -50,6 +52,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ApolloProvider client={apolloClient}>
+        <ConnectionIndicator authClient={authClient} />
         <Keyboard />
         <App authClient={authClient} />
         <Screensaver />

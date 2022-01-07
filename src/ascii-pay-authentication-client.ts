@@ -65,6 +65,12 @@ type Error = {
     message: string;
   };
 };
+type ConnectionStateChange = {
+  type: 'ConnectionStateChange';
+  payload: {
+    connected: boolean;
+  };
+};
 export type WebSocketResponse =
   | FoundUnknownBarcode
   | FoundAccountNumber
@@ -74,9 +80,12 @@ export type WebSocketResponse =
   | NfcCardRemoved
   | RegisterNfcCardSuccessful
   | StatusInformation
-  | Error;
+  | Error
+  | ConnectionStateChange;
 
 export interface WebSocketMessageHandler {
+  onConnectionStateChange?(connected: boolean): void | boolean;
+
   onMessage?(message: WebSocketResponse): void | boolean;
 
   onFoundUnknownBarcode?(code: string): void | boolean;
@@ -128,6 +137,10 @@ function dispatchMessage(message: WebSocketResponse, handler: WebSocketMessageHa
       consumeType =
         (handler.onError && handler.onError(message.payload.source, message.payload.message)) || consumeType;
       break;
+    case 'ConnectionStateChange':
+      consumeType =
+        (handler.onConnectionStateChange && handler.onConnectionStateChange(message.payload.connected)) || consumeType;
+      break;
   }
 
   return !!consumeType || !!consumeMessage;
@@ -157,6 +170,25 @@ export class AsciiPayAuthenticationClient {
     socket.addEventListener('open', function () {
       self.connected = true;
 
+      let message: ConnectionStateChange = {
+        type: 'ConnectionStateChange',
+        payload: {
+          connected: true,
+        },
+      };
+      let useFallbackHandler = true;
+      for (const handler of self.handlerList) {
+        if (dispatchMessage(message, handler)) {
+          useFallbackHandler = false;
+        }
+      }
+
+      if (useFallbackHandler) {
+        for (const handler of self.fallbackHandlerList) {
+          dispatchMessage(message, handler);
+        }
+      }
+
       for (let q of self.queue) {
         q();
       }
@@ -167,6 +199,26 @@ export class AsciiPayAuthenticationClient {
     socket.addEventListener('close', function () {
       self.queue = [];
       self.connected = false;
+
+      let message: ConnectionStateChange = {
+        type: 'ConnectionStateChange',
+        payload: {
+          connected: false,
+        },
+      };
+      let useFallbackHandler = true;
+      for (const handler of self.handlerList) {
+        if (dispatchMessage(message, handler)) {
+          useFallbackHandler = false;
+        }
+      }
+
+      if (useFallbackHandler) {
+        for (const handler of self.fallbackHandlerList) {
+          dispatchMessage(message, handler);
+        }
+      }
+
       setTimeout(() => {
         self.socket = self.createWebSocket();
       }, 1000);
