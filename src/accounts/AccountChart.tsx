@@ -1,6 +1,5 @@
 import React from 'react';
-import { LineConfig } from '@ant-design/charts/es/plots/line';
-import { Line } from '@ant-design/charts';
+import { Line, LineConfig } from '@ant-design/charts';
 import { moneyToString } from '../components/Money';
 import { StampType } from '../types/graphql-global';
 
