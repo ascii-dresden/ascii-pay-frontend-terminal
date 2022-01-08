@@ -6,8 +6,9 @@ import SidebarPage, { SidebarAction } from './components/SidebarPage';
 import { setScreensaver } from './payment/paymentSlice';
 import { useAppDispatch } from './store';
 import ClockIcon from './components/ClockIcon';
+import { useTranslation } from 'react-i18next';
 
-const useDate = () => {
+const useDate = (t: (key: string) => string) => {
   const locale = 'en';
   const [today, setDate] = React.useState(new Date());
 
@@ -23,7 +24,11 @@ const useDate = () => {
   const time = today.toLocaleTimeString(locale, { hour: 'numeric', hour12: false, minute: 'numeric' });
 
   const hour = today.getHours();
-  const wish = `Guten ${(hour < 12 && 'Morgen') || (hour < 17 && 'Tag') || 'Abend'}`;
+  const wish = t(
+    (hour < 12 && 'startPage.greeting.morning') ||
+      (hour < 17 && 'startPage.greeting.day') ||
+      'startPage.greeting.evening'
+  );
 
   return {
     date: `${date} ${time}`,
@@ -32,6 +37,7 @@ const useDate = () => {
 };
 
 export default function StartPage() {
+  const { t } = useTranslation();
   const history = useHistory();
   const handleOpenPayment = () => history.push('/payment');
   const handleOpenAccounts = () => history.push('/accounts');
@@ -39,11 +45,11 @@ export default function StartPage() {
   const handleOpenSettings = () => history.push('/settings');
 
   const dispatch = useAppDispatch();
-  const { date, wish } = useDate();
+  const { date, wish } = useDate(t);
 
   const sidebarActions: SidebarAction[] = [
     {
-      title: 'Enable screensaver',
+      title: t('general.enableScreensaver'),
       element: <ClockIcon />,
       action: (event) => {
         event.stopPropagation();
@@ -63,19 +69,19 @@ export default function StartPage() {
         <div className="start-page-menu">
           <div className="start-page-entry" onClick={handleOpenPayment}>
             <MdShoppingCart />
-            <span>Bezahlen</span>
+            <span>{t('startPage.openPayment')}</span>
           </div>
           <div className="start-page-entry" onClick={handleOpenRegister}>
             <MdLocalAtm />
-            <span>Kasse zählen</span>
+            <span>{t('startPage.openRegister')}</span>
           </div>
           <div className="start-page-entry" onClick={handleOpenAccounts}>
             <MdPeople />
-            <span>Kontoverwaltung</span>
+            <span>{t('startPage.openAccount')}</span>
           </div>
           <div className="start-page-entry" onClick={handleOpenSettings}>
             <MdSettings />
-            <span>Einstellungen</span>
+            <span>{t('startPage.openSettings')}</span>
           </div>
         </div>
       </div>

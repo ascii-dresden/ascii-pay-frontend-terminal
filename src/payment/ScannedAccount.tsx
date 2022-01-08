@@ -7,8 +7,10 @@ import { useAppDispatch, useAppSelector } from '../store';
 import { StampType } from '../types/graphql-global';
 import { removeAccount } from './paymentSlice';
 import './ScannedAccount.scss';
+import { useTranslation } from 'react-i18next';
 
 export default function ScannedAccount(props: { authClient: AsciiPayAuthenticationClient }) {
+  const { t } = useTranslation();
   const scannedAccount = useAppSelector((state) => state.payment.scannedAccount);
   const dispatch = useAppDispatch();
 
@@ -20,7 +22,7 @@ export default function ScannedAccount(props: { authClient: AsciiPayAuthenticati
     return (
       <div className="scanned-account">
         <div className="scanned-account-empty">
-          <span>Kein Konto erkannt!</span>
+          <span>{t('payment.noAccount')}</span>
           <div className="scanned-account-refresh" onClick={refresh}>
             <MdRefresh />
           </div>

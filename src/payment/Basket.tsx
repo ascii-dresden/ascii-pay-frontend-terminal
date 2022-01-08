@@ -14,6 +14,7 @@ import {
   removePaymentItemAtIndex,
   setKeypadValue,
 } from './paymentSlice';
+import { useTranslation } from 'react-i18next';
 
 export function findLastIndex<T>(array: Array<T>, predicate: (value: T, index: number, obj: T[]) => boolean): number {
   let l = array.length;
@@ -24,12 +25,13 @@ export function findLastIndex<T>(array: Array<T>, predicate: (value: T, index: n
 }
 
 export default function Basket() {
+  const { t } = useTranslation();
   const storedPaymentItems = useAppSelector((state) => state.payment.storedPaymentItems);
   const keypadValue = useAppSelector((state) => state.payment.keypadValue);
   const dispatch = useAppDispatch();
 
   if (storedPaymentItems.length <= 0 && keypadValue === 0) {
-    return <div className="basket-empty">Warenkorb leer!</div>;
+    return <div className="basket-empty">{t('payment.basket.empty')}</div>;
   }
 
   const paymentItemMap = groupPaymentItems(storedPaymentItems);
@@ -118,7 +120,7 @@ export default function Basket() {
             </div>
           </div>
           <div className="basket-entry-content">
-            <div>Eigener Betrag</div>
+            <div>{t('payment.basket.keypadValue')}</div>
           </div>
           <div className="basket-entry-price">
             <Money value={keypadValue} />
@@ -135,7 +137,7 @@ export default function Basket() {
       0,
       0,
       <div className="basket-delete-all" key="delete-all" onClick={onClear}>
-        <span>Warenkorb leeren</span>
+        <span>{t('payment.basket.emptyAction')}</span>
       </div>
     );
   }

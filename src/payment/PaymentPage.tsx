@@ -30,6 +30,7 @@ import {
 import ProductList from './ProductList';
 import QuickAccess from './QuickAccess';
 import ScannedAccount from './ScannedAccount';
+import { useTranslation } from 'react-i18next';
 
 enum Page {
   QUICK,
@@ -38,6 +39,7 @@ enum Page {
 }
 
 export default function PaymentPage(props: { authClient: AsciiPayAuthenticationClient }) {
+  const { t } = useTranslation();
   const history = useHistory();
   const handleGoBack = () => history.goBack();
 
@@ -53,25 +55,25 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
   const [activePage, setActivePage] = useState(Page.QUICK);
   const quickActions: SidebarAction[] = [
     {
-      title: 'Quick access',
+      title: t('payment.quickAccess'),
       element: <MdApps />,
       action: () => setActivePage(Page.QUICK),
       active: activePage === Page.QUICK,
     },
     {
-      title: 'Keypad',
+      title: t('payment.keypad'),
       element: <MdOutlineCalculate />,
       action: () => setActivePage(Page.KEYPAD),
       active: activePage === Page.KEYPAD,
     },
     {
-      title: 'Product list',
+      title: t('payment.productList'),
       element: <MdManageSearch />,
       action: () => setActivePage(Page.PRODUCTS),
       active: activePage === Page.PRODUCTS,
     },
     {
-      title: 'Enable screensaver',
+      title: t('general.enableScreensaver'),
       element: <ClockIcon />,
       action: (event) => {
         event.stopPropagation();
@@ -162,7 +164,7 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
             onClick={payAction}
             className={storedPaymentItems.length > 0 || keypadValue !== 0 ? 'enabled' : 'disabled'}
           >
-            Bezahlen
+            {t('payment.pay')}
           </span>
         </div>
       </div>

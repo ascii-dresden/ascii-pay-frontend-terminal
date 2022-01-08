@@ -9,8 +9,10 @@ import { deleteAccountNfcCard, deleteAccountNfcCardVariables } from '../__genera
 import { getAccount, getAccountVariables, getAccount_getAccount } from '../__generated__/getAccount';
 import { setAccountNumber, setAccountNumberVariables } from '../__generated__/setAccountNumber';
 import './AccountDetails.scss';
+import { useTranslation } from 'react-i18next';
 
 export default function AccountDetails(props: { id: string; authClient: AsciiPayAuthenticationClient }) {
+  const { t } = useTranslation();
   const client = useApolloClient();
 
   const { loading, error, data } = useQuery<getAccount, getAccountVariables>(GET_ACCOUNT, {
@@ -126,7 +128,7 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
   if (registerNfc && account.id) {
     let action = [
       {
-        label: 'Register nfc card',
+        label: t('account.registerNfcToken'),
         action: () => {
           if (account.id) {
             props.authClient.registerNfcCard(account.id);
@@ -135,14 +137,14 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
         },
       },
       {
-        label: 'Cancel',
+        label: t('general.cancel'),
         action: () => {
           setRegisterNfc(null);
         },
       },
     ];
     addView = (
-      <Dialog title="Found new nfc card" actions={action}>
+      <Dialog title={t('account.foundNewNfcToken')} actions={action}>
         <div className="form">
           <div>
             <label>NFC Type</label>
@@ -158,7 +160,7 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
   } else if (registerAccountNumber && account.id) {
     let action = [
       {
-        label: 'Register account number',
+        label: t('account.registerAccountNumber'),
         action: () => {
           if (account.id) {
             registerAccountNumberCallback(registerAccountNumber);
@@ -167,17 +169,17 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
         },
       },
       {
-        label: 'Cancel',
+        label: t('general.cancel'),
         action: () => {
           setRegisterAccountNumber(null);
         },
       },
     ];
     addView = (
-      <Dialog title="Found account number" actions={action}>
+      <Dialog title={t('account.foundNewAccountNumber')} actions={action}>
         <div className="form">
           <div>
-            <label>Account number</label>
+            <label>{t('account.accountNumber')}</label>
             <input readOnly={true} value={registerAccountNumber} />
           </div>
         </div>
@@ -187,7 +189,7 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
 
   let nfc = account.nfcTokens.map((token) => (
     <div key={token.cardId}>
-      <label>NFC Token</label>
+      <label>{t('account.nfcToken')}</label>
       <div className="input-group">
         <input readOnly={true} value={token.name + ": '" + token.cardId + "'"} />
         <button style={{ width: '4rem' }} onClick={() => removeNfcToken(token.cardId)}>
@@ -200,19 +202,19 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
   return (
     <div className="account-details form">
       <div>
-        <label>Name</label>
+        <label>{t('account.name')}</label>
         <input readOnly={true} value={account.name || ''} />
       </div>
       <div>
-        <label>Username</label>
+        <label>{t('account.username')}</label>
         <input readOnly={true} value={account.username || ''} />
       </div>
       <div>
-        <label>Account number</label>
+        <label>{t('account.accountNumber')}</label>
         <input readOnly={true} value={account.accountNumber || ''} />
       </div>
       <div>
-        <label>Permission</label>
+        <label>{t('account.permission')}</label>
         <input readOnly={true} value={account.permission || ''} />
       </div>
       {nfc}

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import './SettingsPage.scss';
 import SidebarPage from './components/SidebarPage';
 import { AsciiPayAuthenticationClient, WebSocketMessageHandler } from './ascii-pay-authentication-client';
+import { useTranslation } from 'react-i18next';
 
 const colors = ['teal', 'green', 'blue', 'purple', 'yellow', 'orange', 'red'];
 
@@ -28,6 +29,7 @@ export const useWindowSize = () => {
 };
 
 export default function SettingsPage(props: { authClient: AsciiPayAuthenticationClient }) {
+  const { t } = useTranslation();
   const history = useHistory();
   const handleGoBack = () => history.goBack();
 
@@ -71,21 +73,21 @@ export default function SettingsPage(props: { authClient: AsciiPayAuthentication
   return (
     <SidebarPage defaultAction={handleGoBack}>
       <div className="settings">
-        <span>Settings</span>
+        <span>{t('settingsPage.name')}</span>
         <div className="settings-columns">
           <div>
             <div>
-              <span>Theme</span>
+              <span>{t('settingsPage.theme')}</span>
               <div className="settings-item settings-theme">
                 <div
-                  data-name="Light mode"
+                  data-name={t('settingsPage.themeLight')}
                   className={'theme-light' + (!darkMode ? ' active' : '')}
                   onClick={() => setDarkMode(false)}
                 >
                   <img src="/favicon.svg" alt="" />
                 </div>
                 <div
-                  data-name="Dark mode"
+                  data-name={t('settingsPage.themeDark')}
                   className={'theme-dark' + (darkMode ? ' active' : '')}
                   onClick={() => setDarkMode(true)}
                 >
@@ -94,24 +96,24 @@ export default function SettingsPage(props: { authClient: AsciiPayAuthentication
               </div>
             </div>
             <div>
-              <span>Highlight color</span>
+              <span>{t('settingsPage.highlightColor')}</span>
               <div className="settings-item settings-highlight-color">{hightlightViews}</div>
             </div>
             <div>
-              <span>Actions</span>
+              <span>{t('settingsPage.actions')}</span>
               <div className="settings-item settings-actions form">
-                <button onClick={() => window.location.reload()}>Reload page</button>
-                <button onClick={() => props.authClient.requestReboot()}>Reboot terminal</button>
+                <button onClick={() => window.location.reload()}>{t('settingsPage.reload')}</button>
+                <button onClick={() => props.authClient.requestReboot()}>{t('settingsPage.restart')}</button>
               </div>
             </div>
           </div>
           <div>
             <div>
-              <span>Window size</span>
+              <span>{t('settingsPage.windowSize')}</span>
               <div>
                 {windowSize.width}x{windowSize.height}
               </div>
-              <span>Proxy status</span>
+              <span>{t('settingsPage.terminal')}</span>
               <div className="settings-item settings-proxy-status">
                 <code>{statusInformation}</code>
               </div>

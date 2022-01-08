@@ -8,8 +8,10 @@ import Envelope from './Envelope';
 import NoteBox from './NoteBox';
 import './RegisterPage.scss';
 import { RegisterMode, setRegisterMode, toggleResultMode } from './registerSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const history = useHistory();
   const handleGoBack = () => history.goBack();
 
@@ -32,25 +34,25 @@ export default function RegisterPage() {
 
   const sidebarContent: SidebarAction[] = [
     {
-      title: 'Münzeingabe',
+      title: t('register.enterCoins'),
       element: <MdEuroSymbol />,
       action: () => dispatch(setRegisterMode(RegisterMode.COINS)),
       active: registerMode === RegisterMode.COINS,
     },
     {
-      title: 'Scheineingabe',
+      title: t('register.enterNotes'),
       element: <MdLocalAtm />,
       action: () => dispatch(setRegisterMode(RegisterMode.NOTES)),
       active: registerMode === RegisterMode.NOTES,
     },
     {
-      title: 'Übersicht',
+      title: t('register.overview'),
       element: <MdMailOutline />,
       action: () => dispatch(setRegisterMode(RegisterMode.RESULT)),
       active: registerMode === RegisterMode.RESULT,
     },
     {
-      title: 'Berechnungsmodus',
+      title: t('register.calculate'),
       element: <MdDone />,
       action: () => dispatch(toggleResultMode()),
       active: !!previous,

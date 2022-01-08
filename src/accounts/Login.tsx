@@ -5,8 +5,10 @@ import { AsciiPayAuthenticationClient, WebSocketMessageHandler } from '../ascii-
 import { GET_ACCOUNT, LOGIN } from '../graphql';
 import { login, loginVariables } from '../__generated__/login';
 import './Login.scss';
+import { useTranslation } from 'react-i18next';
 
 export default function Login(props: { authClient: AsciiPayAuthenticationClient }) {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -62,28 +64,28 @@ export default function Login(props: { authClient: AsciiPayAuthenticationClient 
 
   let errorView = <></>;
   if (error) {
-    errorView = <div className="login-error">Login failed!</div>;
+    errorView = <div className="login-error">{t('account.loginFailed')}</div>;
   }
 
   return (
     <div className="login">
-      <span>Please login to access the account list!</span>
+      <span>{t('account.loginMessage')}</span>
       <div className="login-split">
         <div className="form">
           <div>
-            <label>Username</label>
+            <label>{t('account.username')}</label>
             <input
               ref={usernameInput}
-              placeholder="Username"
+              placeholder={t('account.username')}
               inputMode="none"
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div>
-            <label>Password</label>
+            <label>{t('account.password')}</label>
             <input
               ref={passwordInput}
-              placeholder="Password"
+              placeholder={t('account.password')}
               inputMode="none"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
@@ -93,7 +95,7 @@ export default function Login(props: { authClient: AsciiPayAuthenticationClient 
             disabled={loading}
             onClick={() => onLogin(usernameInput.current?.value ?? username, passwordInput.current?.value ?? password)}
           >
-            Login
+            {t('account.login')}
           </button>
           {errorView}
         </div>

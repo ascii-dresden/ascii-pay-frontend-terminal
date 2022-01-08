@@ -12,6 +12,7 @@ import AccountList from './AccountList';
 import AccountOverview from './AccountOverview';
 import './AccountsPage.scss';
 import Login from './Login';
+import { useTranslation } from 'react-i18next';
 
 enum Mode {
   SELF,
@@ -19,6 +20,7 @@ enum Mode {
 }
 
 export default function AccountsPage(props: { authClient: AsciiPayAuthenticationClient }) {
+  const { t } = useTranslation();
   const client = useApolloClient();
   const history = useHistory();
 
@@ -66,13 +68,13 @@ export default function AccountsPage(props: { authClient: AsciiPayAuthentication
 
   const actions: SidebarAction[] = [
     {
-      title: 'Overview',
+      title: t('account.overview'),
       element: <MdShowChart />,
       action: () => setMode(Mode.SELF),
       active: mode === Mode.SELF,
     },
     {
-      title: 'List',
+      title: t('account.accountList'),
       element: <MdPeople />,
       action: () => setMode(Mode.LIST),
       active: mode === Mode.LIST,

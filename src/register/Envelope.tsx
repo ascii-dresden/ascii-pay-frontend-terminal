@@ -4,8 +4,11 @@ import Money from '../components/Money';
 import { useAppSelector } from '../store';
 import './Envelope.scss';
 import { getTotal } from './registerSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function Envelope() {
+  const { t } = useTranslation();
+
   const coinBox = useAppSelector((state) => state.register.coinBox);
   const noteBox = useAppSelector((state) => state.register.noteBox);
   const previousCoinBox = useAppSelector((state) => state.register.previous?.coinBox);
@@ -15,7 +18,7 @@ export default function Envelope() {
     return (
       <div className="envelope empty">
         <MdArrowBack />
-        <span>Starte Berechnung um Übersicht zu sehen!</span>
+        <span>{t('register.start')}</span>
       </div>
     );
   }
@@ -31,7 +34,7 @@ export default function Envelope() {
   return (
     <div className="envelope">
       <div className="cash-book">
-        <span>Kassenbuch</span>
+        <span>{t('register.cashBook')}</span>
         <div className="cash-book-list">
           <Money value={previousTotal} />
           <Money value={previousTotal - currentTotal} />
@@ -57,25 +60,25 @@ export default function Envelope() {
 
       <div className="envelope-columns">
         <div>
-          <span>Briefumschlag</span>
+          <span>{t('register.envelope')}</span>
           <div>
             <div>
-              <span>Name</span>
-              <span className="secondary">Dein Name</span>
+              <span>{t('register.name')}</span>
+              <span className="secondary">{t('register.yourName')}</span>
             </div>
             <div>
-              <span>Datum</span>
+              <span>{t('register.date')}</span>
               <span>{date}</span>
             </div>
             <div>
-              <span>Summe</span>
+              <span>{t('register.total')}</span>
               <Money value={previousTotal - currentTotal} />
             </div>
           </div>
         </div>
 
         <div>
-          <span>Münzen</span>
+          <span>{t('register.coins')}</span>
           <div>
             <div>
               <span>2 EURO</span>
@@ -113,7 +116,7 @@ export default function Envelope() {
         </div>
 
         <div>
-          <span>Scheine</span>
+          <span>{t('register.notes')}</span>
           <div>
             <div>
               <span>100 EURO</span>

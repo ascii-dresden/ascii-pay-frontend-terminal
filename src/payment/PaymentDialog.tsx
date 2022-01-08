@@ -14,8 +14,10 @@ import Stamp from '../components/Stamp';
 import { StampType } from '../types/graphql-global';
 import { useAppDispatch } from '../store';
 import { useApolloClient } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 export default function PaymentDialog(props: { payment: PaymentPayment; onClose: () => void }) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const client = useApolloClient();
 
@@ -37,7 +39,7 @@ export default function PaymentDialog(props: { payment: PaymentPayment; onClose:
           <MdHelpOutline />
         </div>
       );
-      title = 'Stempel einlösen';
+      title = t('payment.redeemStamps');
       break;
     case 'Error':
       status = (
@@ -97,7 +99,7 @@ export default function PaymentDialog(props: { payment: PaymentPayment; onClose:
         <Stamp value={props.payment.bottleStamps} type={StampType.BOTTLE} />
       </div>
       {props.payment.type === 'ReacalculateStamps' ? (
-        <button onClick={proceedWithoutStamps}>Proceed transaction</button>
+        <button onClick={proceedWithoutStamps}>{t('payment.proceedWithoutStamps')}</button>
       ) : null}
     </div>
   );
@@ -113,7 +115,7 @@ export default function PaymentDialog(props: { payment: PaymentPayment; onClose:
           <Stamp value={props.payment.withStamps.coffeeStamps} type={StampType.COFFEE} />
           <Stamp value={props.payment.withStamps.bottleStamps} type={StampType.BOTTLE} />
         </div>
-        <button onClick={proceedWithStamps}>Pay with stamps</button>
+        <button onClick={proceedWithStamps}>{t('payment.proceedWithStamps')}</button>
       </div>
     );
   }

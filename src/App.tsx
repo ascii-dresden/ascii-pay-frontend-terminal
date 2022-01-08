@@ -10,8 +10,10 @@ import SettingsPage from './SettingsPage';
 import StartPage from './StartPage';
 import { useAppDispatch } from './store';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen';
+import { useTranslation } from 'react-i18next';
 
 export default function App(props: { authClient: AsciiPayAuthenticationClient }) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   (async () => {
@@ -49,7 +51,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
       dispatch(
         showNotification({
           type: NotificationType.QR,
-          title: 'Found unknown barcode',
+          title: t('notification.onFoundUnknownBarcode'),
           description: code,
         })
       );
@@ -58,7 +60,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
       dispatch(
         showNotification({
           type: NotificationType.QR,
-          title: 'Found account number',
+          title: t('notification.onFoundAccountNumber'),
           description: accountNumber,
         })
       );
@@ -67,7 +69,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
       dispatch(
         showNotification({
           type: NotificationType.NFC,
-          title: 'Found unknown nfc card',
+          title: t('notification.onFoundUnknownNfcCard'),
           description: name,
         })
       );
@@ -76,7 +78,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
       dispatch(
         showNotification({
           type: NotificationType.GENERAL,
-          title: 'Product scanned',
+          title: t('notification.onFoundProductId'),
         })
       );
     },
@@ -84,7 +86,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
       dispatch(
         showNotification({
           type: NotificationType.GENERAL,
-          title: 'Account scanned',
+          title: t('notification.onFoundAccountAccessToken'),
         })
       );
     },
@@ -92,7 +94,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
       dispatch(
         showNotification({
           type: NotificationType.NFC,
-          title: 'Nfc card was removed',
+          title: t('notification.onNfcCardRemoved'),
         })
       );
     },
@@ -100,7 +102,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
       dispatch(
         showNotification({
           type: NotificationType.GENERAL,
-          title: 'Receive status information',
+          title: t('notification.onStatusInformation'),
         })
       );
     },
