@@ -29,7 +29,7 @@ export const useWindowSize = () => {
 };
 
 export default function SettingsPage(props: { authClient: AsciiPayAuthenticationClient }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const history = useHistory();
   const handleGoBack = () => history.goBack();
 
@@ -38,6 +38,12 @@ export default function SettingsPage(props: { authClient: AsciiPayAuthentication
     document.body.dataset['theme'] = darkMode ? 'dark' : 'light';
     localStorage.setItem('dark-mode', darkMode.toString());
   }, [darkMode]);
+
+  const [language, setLanguage] = React.useState(localStorage.getItem('language') ?? 'de');
+  React.useEffect(() => {
+    i18n.changeLanguage(language);
+    localStorage.setItem('language', language.toString());
+  }, [language, i18n]);
 
   const [highlightColor, setHighlightColor] = React.useState(localStorage.getItem('highlight-color') || 'blue');
   React.useEffect(() => {
@@ -76,6 +82,15 @@ export default function SettingsPage(props: { authClient: AsciiPayAuthentication
         <span>{t('settingsPage.name')}</span>
         <div className="settings-columns">
           <div>
+            <div>
+              <span>{t('settingsPage.language')}</span>
+              <div className="settings-item settings-actions form">
+                <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+                  <option value="de">{t('settingsPage.languageGerman')}</option>
+                  <option value="en">{t('settingsPage.languageEnglish')}</option>
+                </select>
+              </div>
+            </div>
             <div>
               <span>{t('settingsPage.theme')}</span>
               <div className="settings-item settings-theme">

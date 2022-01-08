@@ -3,7 +3,8 @@
     "enableScreensaver": "Bildschirmschoner",
     "terminalConnected": "NFC-Terminal verbunden!",
     "terminalDisconnected": "NFC-Terminal nicht verbunden!",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "or": "oder"
   },
   "startPage": {
     "greeting": {
@@ -26,7 +27,10 @@
     "reload": "App neu laden",
     "restart": "NFC-Terminal neu starten",
     "windowSize": "Fenstergröße",
-    "terminal": "NFC-Terminal"
+    "terminal": "NFC-Terminal",
+    "language": "Sprache",
+    "languageGerman": "Deutsch",
+    "languageEnglish": "Englisch"
   },
   "notification": {
     "onFoundUnknownBarcode": "Unbekannter Barcode gefunden",

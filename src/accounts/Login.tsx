@@ -70,7 +70,7 @@ export default function Login(props: { authClient: AsciiPayAuthenticationClient 
   return (
     <div className="login">
       <span>{t('account.loginMessage')}</span>
-      <div className="login-split">
+      <div className="login-split" data-or={t('general.or')}>
         <div className="form">
           <div>
             <label>{t('account.username')}</label>
