@@ -4,7 +4,7 @@ import { GET_ACCOUNTS } from '../graphql';
 import { getAccounts } from '../__generated__/getAccounts';
 import './AccountList.scss';
 
-export default function AccountList(props: { onSelect: (id: string) => void }) {
+export default function AccountList(props: { id: string | null; onSelect: (id: string) => void }) {
   const { loading, error, data } = useQuery<getAccounts>(GET_ACCOUNTS, {
     fetchPolicy: 'network-only',
   });
@@ -22,7 +22,7 @@ export default function AccountList(props: { onSelect: (id: string) => void }) {
   }
 
   const accountList = data.getAccounts.map((it: any) => (
-    <div key={it.element.id}>
+    <div key={it.element.id} className={it.element.id === props.id ? 'active' : ''}>
       <span onClick={() => props.onSelect(it.element.id)}>{it.element.name}</span>
     </div>
   ));

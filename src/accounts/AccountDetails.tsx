@@ -75,6 +75,9 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
       setRegisterNfc(null);
       return true;
     },
+    onFoundAccountAccessToken() {
+      return true;
+    },
   };
 
   React.useEffect(() => {

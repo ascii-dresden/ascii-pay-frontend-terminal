@@ -6,6 +6,10 @@
   bottom: 0;
   padding: 0.5rem 0;
 
+  div.active {
+    background-color: var(--secondary-hover-background);
+  }
+
   span {
     display: block;
     padding: 0.5rem 1rem;

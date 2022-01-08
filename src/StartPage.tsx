@@ -9,7 +9,7 @@ import ClockIcon from './components/ClockIcon';
 import { useTranslation } from 'react-i18next';
 
 const useDate = (t: (key: string) => string) => {
-  const locale = 'en';
+  const locale = localStorage.getItem('language') ?? 'de';
   const [today, setDate] = React.useState(new Date());
 
   React.useEffect(() => {

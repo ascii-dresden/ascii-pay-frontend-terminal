@@ -89,7 +89,7 @@ export default function AccountsPage(props: { authClient: AsciiPayAuthentication
     case Mode.LIST:
       content = (
         <>
-          <AccountList onSelect={(id) => setAccountId(id)} />
+          <AccountList id={accountId} onSelect={(id) => setAccountId(id)} />
           {accountId ? <AccountDetails id={accountId} authClient={props.authClient} /> : <></>}
         </>
       );
