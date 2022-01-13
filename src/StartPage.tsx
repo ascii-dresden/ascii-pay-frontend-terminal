@@ -3,10 +3,16 @@ import { useHistory } from 'react-router-dom';
 import { MdLocalAtm, MdPeople, MdSettings, MdShoppingCart } from 'react-icons/md';
 import './StartPage.scss';
 import SidebarPage, { SidebarAction } from './components/SidebarPage';
-import { setScreensaver } from './payment/paymentSlice';
+import { productScanned, receiveAccountAccessToken, setScreensaver } from './payment/paymentSlice';
 import { useAppDispatch } from './store';
 import ClockIcon from './components/ClockIcon';
 import { useTranslation } from 'react-i18next';
+import {
+  AsciiPayAuthenticationClient,
+  WebSocketMessageHandler,
+  WebSocketResponse,
+} from './ascii-pay-authentication-client';
+import { useApolloClient } from '@apollo/client';
 
 const useDate = (t: (key: string) => string) => {
   const locale = localStorage.getItem('language') ?? 'de';
@@ -36,9 +42,11 @@ const useDate = (t: (key: string) => string) => {
   };
 };
 
-export default function StartPage() {
+export default function StartPage(props: { authClient: AsciiPayAuthenticationClient }) {
   const { t } = useTranslation();
   const history = useHistory();
+  const client = useApolloClient();
+
   const handleOpenPayment = () => history.push('/payment');
   const handleOpenAccounts = () => history.push('/accounts');
   const handleOpenRegister = () => history.push('/register');
@@ -46,6 +54,37 @@ export default function StartPage() {
 
   const dispatch = useAppDispatch();
   const { date, wish } = useDate(t);
+
+  const handler: WebSocketMessageHandler = {
+    onFoundAccountAccessToken(accessToken: string) {
+      dispatch(setScreensaver(false));
+      dispatch(
+        receiveAccountAccessToken({
+          apollo: client,
+          accessToken: accessToken,
+        })
+      );
+      history.push('/payment');
+      return true;
+    },
+    onFoundProductId(product_id: string) {
+      dispatch(setScreensaver(false));
+      dispatch(
+        productScanned({
+          apollo: client,
+          product_id: product_id,
+        })
+      );
+      history.push('/payment');
+      return true;
+    },
+  };
+
+  React.useEffect(() => {
+    props.authClient.addEventHandler(handler);
+    return () => props.authClient.removeEventHandler(handler);
+    // eslint-disable-next-line
+  }, [props.authClient]);
 
   const sidebarActions: SidebarAction[] = [
     {

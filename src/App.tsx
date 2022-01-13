@@ -140,7 +140,7 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
           <SettingsPage authClient={props.authClient} />
         </Route>
         <Route path="">
-          <StartPage />
+          <StartPage authClient={props.authClient} />
         </Route>
       </Switch>
     </Router>
