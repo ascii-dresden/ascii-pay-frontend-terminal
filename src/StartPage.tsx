@@ -7,11 +7,7 @@ import { productScanned, receiveAccountAccessToken, setScreensaver } from './pay
 import { useAppDispatch } from './store';
 import ClockIcon from './components/ClockIcon';
 import { useTranslation } from 'react-i18next';
-import {
-  AsciiPayAuthenticationClient,
-  WebSocketMessageHandler,
-  WebSocketResponse,
-} from './ascii-pay-authentication-client';
+import { AsciiPayAuthenticationClient, WebSocketMessageHandler } from './ascii-pay-authentication-client';
 import { useApolloClient } from '@apollo/client';
 
 const useDate = (t: (key: string) => string) => {

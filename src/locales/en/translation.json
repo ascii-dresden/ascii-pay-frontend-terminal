@@ -86,6 +86,8 @@
     "password": "Password",
     "permission": "Permission",
     "registerAccountNumber": "Register account number",
-    "foundNewAccountNumber": "Found new account number"
+    "foundNewAccountNumber": "Found new account number",
+    "balance": "Balance ( >= Limit)",
+    "stamps": "Coffee | Bottle stamps"
   }
 }

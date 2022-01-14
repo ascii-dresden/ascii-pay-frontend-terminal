@@ -10,6 +10,7 @@ import { getAccount, getAccountVariables, getAccount_getAccount } from '../__gen
 import { setAccountNumber, setAccountNumberVariables } from '../__generated__/setAccountNumber';
 import './AccountDetails.scss';
 import { useTranslation } from 'react-i18next';
+import { moneyToString } from '../components/Money';
 
 export default function AccountDetails(props: { id: string; authClient: AsciiPayAuthenticationClient }) {
   const { t } = useTranslation();
@@ -211,6 +212,19 @@ export default function AccountDetails(props: { id: string; authClient: AsciiPay
       <div>
         <label>{t('account.username')}</label>
         <input readOnly={true} value={account.username || ''} />
+      </div>
+      <div className="input-row">
+        <div>
+          <label>{t('account.balance')}</label>
+          <input
+            readOnly={true}
+            value={moneyToString(account.credit) + ' ( >= ' + moneyToString(account.minimumCredit) + ')'}
+          />
+        </div>
+        <div>
+          <label>{t('account.stamps')}</label>
+          <input readOnly={true} value={account.coffeeStamps + ' | ' + account.bottleStamps} />
+        </div>
       </div>
       <div>
         <label>{t('account.accountNumber')}</label>

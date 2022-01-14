@@ -86,6 +86,8 @@
     "password": "Passwort",
     "permission": "Berechtigung",
     "registerAccountNumber": "Kontonummer registrieren",
-    "foundNewAccountNumber": "Neue Kontonummer gefunden"
+    "foundNewAccountNumber": "Neue Kontonummer gefunden",
+    "balance": "Guthaben ( >= Limit)",
+    "stamps": "Kaffee- | Flaschen-Stempel "
   }
 }

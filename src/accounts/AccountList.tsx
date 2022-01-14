@@ -21,7 +21,10 @@ export default function AccountList(props: { id: string | null; onSelect: (id: s
     return <></>;
   }
 
-  const accountList = data.getAccounts.map((it: any) => (
+  let sortedData = data.getAccounts.slice();
+  sortedData.sort((a, b) => a.element.name.localeCompare(b.element.name));
+
+  const accountList = sortedData.map((it: any) => (
     <div key={it.element.id} className={it.element.id === props.id ? 'active' : ''}>
       <span onClick={() => props.onSelect(it.element.id)}>{it.element.name}</span>
     </div>

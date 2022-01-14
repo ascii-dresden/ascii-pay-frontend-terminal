@@ -222,3 +222,15 @@ code {
     border-right: none;
   }
 }
+
+.input-row {
+  display: flex;
+
+  & > * {
+    flex-grow: 1;
+  }
+
+  & > :not(:last-child) {
+    margin-right: 0.4rem;
+  }
+}
