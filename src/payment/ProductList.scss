@@ -182,3 +182,17 @@
 .product-entry-bio {
   color: var(--success-color);
 }
+
+.product-entry-nickname {
+  font-style: italic;
+  color: var(--secondary-text-color);
+  padding: 0 0.2rem;
+  font-size: 0.8rem;
+
+  &::before {
+    content: '"';
+  }
+  &::after {
+    content: '"';
+  }
+}

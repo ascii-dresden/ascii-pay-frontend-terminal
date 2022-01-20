@@ -194,6 +194,11 @@ function ProductItem(props: { product: getProducts_getProducts }) {
     <div className="product-entry-name">
       <span>{splitName ? props.product.name.substring(0, start) : props.product.name}</span>
       {splitName ? <i>{props.product.name.substring(start, end)}</i> : null}
+      {props.product.nickname ? (
+        <div key="nickname" className="product-entry-nickname">
+          {props.product.nickname}
+        </div>
+      ) : null}
       {props.product.flags.includes('BIO') ? (
         <div key="bio" className="product-entry-bio">
           <FaLeaf />
