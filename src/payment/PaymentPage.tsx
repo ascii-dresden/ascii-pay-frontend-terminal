@@ -31,6 +31,7 @@ import ProductList from './ProductList';
 import QuickAccess from './QuickAccess';
 import ScannedAccount from './ScannedAccount';
 import { useTranslation } from 'react-i18next';
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode';
 
 enum Page {
   QUICK,
@@ -94,6 +95,7 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
 
   const handler: WebSocketMessageHandler = {
     onMessage(_message: WebSocketResponse) {
+      BackgroundMode.wakeUp();
       dispatch(setScreensaver(false));
     },
     onFoundAccountAccessToken(accessToken: string) {

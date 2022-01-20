@@ -10,6 +10,7 @@ import SettingsPage from './SettingsPage';
 import StartPage from './StartPage';
 import { useAppDispatch } from './store';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen';
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode';
 import { useTranslation } from 'react-i18next';
 
 export default function App(props: { authClient: AsciiPayAuthenticationClient }) {
@@ -47,6 +48,9 @@ export default function App(props: { authClient: AsciiPayAuthenticationClient })
   }, [dispatch]);
 
   const handler: WebSocketMessageHandler = {
+    onMessage(_) {
+      BackgroundMode.wakeUp();
+    },
     onFoundUnknownBarcode(code: string) {
       dispatch(
         showNotification({

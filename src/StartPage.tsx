@@ -9,6 +9,7 @@ import ClockIcon from './components/ClockIcon';
 import { useTranslation } from 'react-i18next';
 import { AsciiPayAuthenticationClient, WebSocketMessageHandler } from './ascii-pay-authentication-client';
 import { useApolloClient } from '@apollo/client';
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode';
 
 const useDate = (t: (key: string) => string) => {
   const locale = localStorage.getItem('language') ?? 'de';
@@ -53,6 +54,7 @@ export default function StartPage(props: { authClient: AsciiPayAuthenticationCli
 
   const handler: WebSocketMessageHandler = {
     onFoundAccountAccessToken(accessToken: string) {
+      BackgroundMode.wakeUp();
       dispatch(setScreensaver(false));
       dispatch(
         receiveAccountAccessToken({
@@ -64,6 +66,7 @@ export default function StartPage(props: { authClient: AsciiPayAuthenticationCli
       return true;
     },
     onFoundProductId(product_id: string) {
+      BackgroundMode.wakeUp();
       dispatch(setScreensaver(false));
       dispatch(
         productScanned({

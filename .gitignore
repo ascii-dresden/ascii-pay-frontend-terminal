@@ -31,7 +31,6 @@ yarn-error.log*
 
 # misc
 **/__generated__
-schema.graphql
 /.sass-cache
 /connect.lock
 /coverage

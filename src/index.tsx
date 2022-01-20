@@ -14,6 +14,7 @@ import { AsciiPayAuthenticationClient } from './ascii-pay-authentication-client'
 import { setScreensaver } from './payment/paymentSlice';
 import NotificationManager from './components/NotificationManager';
 import ConnectionIndicator from './components/ConnectionIndicator';
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode';
 
 export const SERVER_URI = 'https://pay.ascii.coffee';
 export const PROXY_URI = 'ws://10.3.141.1:9001/';
@@ -49,6 +50,18 @@ const authClient = new AsciiPayAuthenticationClient(PROXY_URI);
 document.body.addEventListener('click', () => {
   store.dispatch(setScreensaver(false));
 });
+
+document.addEventListener(
+  'deviceready',
+  function () {
+    BackgroundMode.enable();
+    BackgroundMode.excludeFromTaskList();
+    BackgroundMode.overrideBackButton();
+    // BackgroundMode.disableWebViewOptimizations();
+    // BackgroundMode.disableBatteryOptimizations();
+  },
+  false
+);
 
 ReactDOM.render(
   <React.StrictMode>
