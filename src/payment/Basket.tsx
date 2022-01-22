@@ -81,9 +81,9 @@ export default function Basket() {
     }
 
     let stamps: any[] = [];
-    if (value.payWithStamps === StampType.COFFEE) {
+    if (value.payWithStamps === StampType.COFFEE || value.couldBePaidWithStamps === StampType.COFFEE) {
       stamps.push(<Stamp key="coffee-10" value={-10} type={StampType.COFFEE} />);
-    } else if (value.payWithStamps === StampType.BOTTLE) {
+    } else if (value.payWithStamps === StampType.BOTTLE || value.couldBePaidWithStamps === StampType.BOTTLE) {
       stamps.push(<Stamp key="bottle-10" value={-10} type={StampType.BOTTLE} />);
     }
 

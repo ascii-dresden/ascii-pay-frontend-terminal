@@ -20,6 +20,7 @@ export interface PaymentProduct {
   image: string | null;
   price: number;
   payWithStamps: StampType;
+  couldBePaidWithStamps: StampType;
   giveStamps: StampType;
 }
 export interface PaymentItem {
@@ -409,7 +410,8 @@ async function onProductScanned(
       name: data.name,
       image: data.image,
       price: data.price,
-      payWithStamps: data.payWithStamps,
+      payWithStamps: StampType.NONE,
+      couldBePaidWithStamps: data.payWithStamps,
       giveStamps: data.giveStamps,
     };
   }
@@ -497,7 +499,7 @@ export const paymentSlice = createSlice({
       items.push({
         price: action.payload.price,
         payWithStamps: action.payload.payWithStamps,
-        couldBePaidWithStamps: StampType.NONE,
+        couldBePaidWithStamps: action.payload.couldBePaidWithStamps,
         giveStamps: action.payload.giveStamps,
         product: action.payload,
       });

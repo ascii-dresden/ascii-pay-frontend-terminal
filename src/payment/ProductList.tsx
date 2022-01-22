@@ -146,6 +146,7 @@ function ProductItem(props: { product: getProducts_getProducts }) {
         image: props.product.image,
         price: props.product.price,
         payWithStamps: StampType.NONE,
+        couldBePaidWithStamps: props.product.payWithStamps,
         giveStamps: props.product.giveStamps,
       })
     );
