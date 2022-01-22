@@ -86,7 +86,8 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
 
   const payAction = () => {
     if (keypadValue !== 0) {
-      dispatch(submitKeypadValue(keypadValue));
+      let label = keypadValue >= 0 ? t('payment.basket.keypadValuePositive') : t('payment.basket.keypadValueNegative');
+      dispatch(submitKeypadValue([keypadValue, label]));
     }
 
     dispatch(payment());
@@ -142,7 +143,8 @@ export default function PaymentPage(props: { authClient: AsciiPayAuthenticationC
           value={keypadValue}
           onChange={(value) => dispatch(setKeypadValue(value))}
           onSubmit={(value) => {
-            dispatch(submitKeypadValue(value));
+            let label = value >= 0 ? t('payment.basket.keypadValuePositive') : t('payment.basket.keypadValueNegative');
+            dispatch(submitKeypadValue([value, label]));
           }}
         />
       );

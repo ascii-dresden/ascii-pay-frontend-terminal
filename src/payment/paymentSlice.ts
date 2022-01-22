@@ -474,16 +474,16 @@ export const paymentSlice = createSlice({
     setKeypadValue: (state, action: PayloadAction<number>) => {
       state.keypadValue = action.payload;
     },
-    submitKeypadValue: (state, action: PayloadAction<number>) => {
+    submitKeypadValue: (state, action: PayloadAction<[number, string]>) => {
       state.keypadValue = 0;
       const items = state.storedPaymentItems.slice();
       items.push({
-        price: action.payload,
+        price: action.payload[0],
         payWithStamps: StampType.NONE,
         couldBePaidWithStamps: StampType.NONE,
         giveStamps: StampType.NONE,
         product: null,
-        nameHint: 'Eigener Betrag',
+        nameHint: action.payload[1],
       });
       state.storedPaymentItems = items;
 

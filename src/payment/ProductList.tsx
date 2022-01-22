@@ -12,6 +12,7 @@ import { addProduct } from './paymentSlice';
 import { StampType } from '../types/graphql-global';
 import Stamp from '../components/Stamp';
 import { SERVER_URI } from '..';
+import { useTranslation } from 'react-i18next';
 
 const groupBy = function <T>(array: T[], selector: (x: T) => string | null) {
   let map = new Map<string | null, T[]>();
@@ -28,6 +29,7 @@ const groupBy = function <T>(array: T[], selector: (x: T) => string | null) {
 };
 
 export default function ProductList() {
+  const { t } = useTranslation();
   const { loading, error, data } = useQuery<getProducts>(GET_PRODUCTS, {
     fetchPolicy: 'network-only',
   });
@@ -91,19 +93,19 @@ export default function ProductList() {
     switch (name) {
       case 'Heißgetränke':
         icon = <MdCoffee />;
-        name = 'Kaffee';
+        name = t('payment.products.coffee');
         break;
       case 'Kaltgetränke 0,5l':
         icon = <FaWineBottle />;
-        name = 'Flasche 0,5l';
+        name = t('payment.products.bottle_500');
         break;
       case 'Kaltgetränke 0,33l':
         icon = <FaWineBottle />;
-        name = 'Flasche 0,33l';
+        name = t('payment.products.bottle_330');
         break;
       case 'Snacks':
         icon = <GiChocolateBar />;
-        name = 'Snacks';
+        name = t('payment.products.snacks');
         break;
     }
 
@@ -133,6 +135,7 @@ export default function ProductList() {
 }
 
 function ProductItem(props: { product: getProducts_getProducts }) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const clickHandler = useCallback(() => {
@@ -180,9 +183,9 @@ function ProductItem(props: { product: getProducts_getProducts }) {
   }
 
   if (props.product.payWithStamps === StampType.COFFEE) {
-    stamps.push(<Stamp key="coffee-10" value="Bezahlbar mit " type={StampType.COFFEE} />);
+    stamps.push(<Stamp key="coffee-10" value={t('payment.products.payable') as string} type={StampType.COFFEE} />);
   } else if (props.product.payWithStamps === StampType.BOTTLE) {
-    stamps.push(<Stamp key="bottle-10" value="Bezahlbar mit " type={StampType.BOTTLE} />);
+    stamps.push(<Stamp key="bottle-10" value={t('payment.products.payable') as string} type={StampType.BOTTLE} />);
   }
 
   let start = props.product.name.indexOf('(');

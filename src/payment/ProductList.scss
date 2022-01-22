@@ -178,6 +178,10 @@
   display: flex;
   gap: 0.2rem;
   align-items: center;
+
+  span {
+    white-space: normal;
+  }
 }
 .product-entry-bio {
   color: var(--success-color);

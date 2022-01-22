@@ -60,7 +60,15 @@
     "basket": {
       "empty": "Basket empty!",
       "emptyAction": "Empty basket",
-      "keypadValue": "Custem value"
+      "keypadValuePositive": "Custom payment",
+      "keypadValueNegative": "Recharge credit"
+    },
+    "products": {
+      "coffee": "Coffee",
+      "bottle_500": "Bottle 0,5l",
+      "bottle_330": "Bottle 0,33l",
+      "snacks": "Snacks",
+      "payable": "Payable with"
     },
     "redeemStamps": "Redeem stamps",
     "proceedWithoutStamps": "Continue",

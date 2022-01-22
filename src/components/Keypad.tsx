@@ -5,21 +5,31 @@ import Money from './Money';
 
 import './Keypad.scss';
 
+const MAX = 999_999;
+const MIN = -999_999;
+
+function validateValue(value: number): number {
+  return Math.max(MIN, Math.min(MAX, value));
+}
+
 export default function Keypad(props: {
   value: number;
   onChange: (value: number) => void;
   onSubmit: (value: number) => void;
 }) {
   const onDigitPressed = (digit: number) => {
-    props.onChange(props.value * 10 + (Math.sign(props.value) || 1) * digit);
+    let newValue = props.value * 10 + (Math.sign(props.value) || 1) * digit;
+    props.onChange(validateValue(newValue));
   };
 
   const onBackspace = () => {
-    props.onChange(Math.sign(props.value) * Math.floor(Math.abs(props.value / 10)));
+    let newValue = Math.sign(props.value) * Math.floor(Math.abs(props.value / 10));
+    props.onChange(validateValue(newValue));
   };
 
   const onNegate = () => {
-    props.onChange(-props.value);
+    let newValue = -props.value;
+    props.onChange(validateValue(newValue));
   };
 
   const onSubmit = () => {

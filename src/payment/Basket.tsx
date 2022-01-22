@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdEuroSymbol, MdPhoto } from 'react-icons/md';
+import { MdEuroSymbol, MdPhoto, MdOutlineRedeem } from 'react-icons/md';
 import { SERVER_URI } from '..';
 import Money from '../components/Money';
 import Stamp from '../components/Stamp';
@@ -65,11 +65,19 @@ export default function Basket() {
         );
       }
     } else {
-      image = (
-        <div>
-          <MdEuroSymbol />
-        </div>
-      );
+      if (value.price < 0) {
+        image = (
+          <div>
+            <MdOutlineRedeem />
+          </div>
+        );
+      } else {
+        image = (
+          <div>
+            <MdEuroSymbol />
+          </div>
+        );
+      }
     }
 
     let stamps: any[] = [];
@@ -114,13 +122,13 @@ export default function Basket() {
         <div className="basket-entry inactive">
           <div className={'basket-entry-image'}>
             <div>
-              <div>
-                <MdEuroSymbol />
-              </div>
+              <div>{keypadValue >= 0 ? <MdEuroSymbol /> : <MdOutlineRedeem />}</div>
             </div>
           </div>
           <div className="basket-entry-content">
-            <div>{t('payment.basket.keypadValue')}</div>
+            <div>
+              {keypadValue >= 0 ? t('payment.basket.keypadValuePositive') : t('payment.basket.keypadValueNegative')}
+            </div>
           </div>
           <div className="basket-entry-price">
             <Money value={keypadValue} />
