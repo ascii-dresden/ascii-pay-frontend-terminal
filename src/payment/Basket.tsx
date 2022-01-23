@@ -6,15 +6,10 @@ import Stamp from '../components/Stamp';
 import { useAppDispatch, useAppSelector } from '../store';
 import { StampType } from '../types/graphql-global';
 import './Basket.scss';
-import {
-  clearPaymentItems,
-  groupPaymentItems,
-  PaymentItem,
-  paymentItemEqual,
-  removePaymentItemAtIndex,
-  setKeypadValue,
-} from './paymentSlice';
+import { clearPaymentItems, removePaymentItemAtIndex, setKeypadValue } from './paymentSlice';
 import { useTranslation } from 'react-i18next';
+import { groupPaymentItems, paymentItemEqual } from './paymentSliceHelper';
+import { PaymentItem } from './paymentSliceModel';
 
 export function findLastIndex<T>(array: Array<T>, predicate: (value: T, index: number, obj: T[]) => boolean): number {
   let l = array.length;

@@ -6,240 +6,24 @@ import { StampType } from '../types/graphql-global';
 import { getAccountByAccessToken, getAccountByAccessTokenVariables } from '../__generated__/getAccountByAccessToken';
 import { getProduct, getProductVariables } from '../__generated__/getProduct';
 import { transaction, transactionVariables } from '../__generated__/transaction';
-
-export interface PaymentAccount {
-  id: UUID;
-  name: string;
-  credit: number;
-  coffeeStamps: number;
-  bottleStamps: number;
-}
-export interface PaymentProduct {
-  id: UUID;
-  name: string;
-  image: string | null;
-  price: number;
-  payWithStamps: StampType;
-  couldBePaidWithStamps: StampType;
-  giveStamps: StampType;
-}
-export interface PaymentItem {
-  price: number;
-  payWithStamps: StampType;
-  couldBePaidWithStamps: StampType;
-  giveStamps: StampType;
-  product: PaymentProduct | null;
-  nameHint?: string;
-  colorHint?: string;
-}
-
-export interface PaymentPaymentWaiting {
-  type: 'Waiting';
-  timeout: number;
-  stopIfStampPaymentIsPossible: boolean;
-  total: number;
-  coffeeStamps: number;
-  bottleStamps: number;
-  items: PaymentItem[];
-}
-
-export interface PaymentPaymentRecalculateStamps {
-  type: 'ReacalculateStamps';
-  timeout: number;
-  stopIfStampPaymentIsPossible: boolean;
-  accountAccessToken: string;
-  total: number;
-  coffeeStamps: number;
-  bottleStamps: number;
-  items: PaymentItem[];
-  withStamps: {
-    total: number;
-    coffeeStamps: number;
-    bottleStamps: number;
-    items: PaymentItem[];
-  };
-}
-
-export interface PaymentPaymentInProgress {
-  type: 'InProgress';
-  timeout: number;
-  stopIfStampPaymentIsPossible: boolean;
-  total: number;
-  coffeeStamps: number;
-  bottleStamps: number;
-  items: PaymentItem[];
-}
-export interface PaymentPaymentError {
-  type: 'Error';
-  timeout: number;
-  stopIfStampPaymentIsPossible: boolean;
-  total: number;
-  coffeeStamps: number;
-  bottleStamps: number;
-  message: string;
-}
-export interface PaymentPaymentSuccess {
-  type: 'Success';
-  timeout: number;
-  stopIfStampPaymentIsPossible: boolean;
-  total: number;
-  coffeeStamps: number;
-  bottleStamps: number;
-}
-export type PaymentPayment =
-  | PaymentPaymentWaiting
-  | PaymentPaymentInProgress
-  | PaymentPaymentRecalculateStamps
-  | PaymentPaymentError
-  | PaymentPaymentSuccess;
-
-export enum NotificationType {
-  GENERAL,
-  NFC,
-  QR,
-}
-export enum NotificationColor {
-  INFO,
-  WARN,
-  ERROR,
-}
-export interface Notification {
-  type: NotificationType;
-  color: NotificationColor;
-  title: string;
-  description: string;
-  timeout: number;
-}
-
-interface PaymentState {
-  screensaver: boolean;
-  screensaverTimeout: number;
-  keypadValue: number;
-  storedPaymentItems: PaymentItem[];
-  scannedAccount: PaymentAccount | null;
-  paymentTotal: number;
-  paymentCoffeeStamps: number;
-  paymentBottleStamps: number;
-  payment: PaymentPayment | null;
-  notifications: Notification[];
-}
-
-const initialState: PaymentState = {
-  screensaver: true,
-  screensaverTimeout: 0,
-  keypadValue: 0,
-  storedPaymentItems: [],
-  scannedAccount: null,
-  paymentTotal: 0,
-  paymentCoffeeStamps: 0,
-  paymentBottleStamps: 0,
-  payment: null,
-  notifications: [],
-};
-
-const SCREENSAVER_TIMEOUT = 300_000;
-const NOTIFICATION_TIMEOUT = 5_000;
-const PAYMENT_WAITING_TIMEOUT = 30_000;
-const PAYMENT_INPROGRESS_TIMEOUT = 3_000;
-const PAYMENT_ERROR_TIMEOUT = 5_000;
-const PAYMENT_SUCCESS_TIMEOUT = 2_000;
-
-export function paymentItemEqual(a: PaymentItem, b: PaymentItem): boolean {
-  if (a.price !== b.price) return false;
-  if (a.payWithStamps !== b.payWithStamps) return false;
-  if (a.couldBePaidWithStamps !== b.couldBePaidWithStamps) return false;
-  if (a.giveStamps !== b.giveStamps) return false;
-  if (a.product?.id !== b.product?.id) return false;
-  if (a.nameHint !== b.nameHint) return false;
-  if (a.colorHint !== b.colorHint) return false;
-
-  return true;
-}
-
-export function groupPaymentItems(items: PaymentItem[]): Map<PaymentItem, number> {
-  let map = new Map<PaymentItem, number>();
-
-  for (let item of items) {
-    let found = false;
-    for (let [key, value] of map) {
-      if (paymentItemEqual(item, key)) {
-        found = true;
-        map.set(key, value + 1);
-        break;
-      }
-    }
-
-    if (!found) {
-      map.set(item, 1);
-    }
-  }
-
-  return map;
-}
-
-function calcAlternativeStamps(
-  current: {
-    total: number;
-    coffeeStamps: number;
-    bottleStamps: number;
-    items: PaymentItem[];
-  },
-  account: PaymentAccount
-): {
-  total: number;
-  coffeeStamps: number;
-  bottleStamps: number;
-  items: PaymentItem[];
-} {
-  let newItems = current.items.slice();
-
-  let maxPrice: number = 0;
-  let maxIndex: number = -1;
-  for (let i = 0; i < newItems.length; i++) {
-    let item = newItems[i];
-
-    if (item.payWithStamps !== StampType.NONE) {
-      continue;
-    }
-
-    switch (item.couldBePaidWithStamps) {
-      case StampType.COFFEE:
-        if (account.coffeeStamps >= 10 && item.price > maxPrice) {
-          maxIndex = i;
-          maxPrice = item.price;
-        }
-        break;
-      case StampType.BOTTLE:
-        if (account.bottleStamps >= 10 && item.price > maxPrice) {
-          maxIndex = i;
-          maxPrice = item.price;
-        }
-        break;
-    }
-  }
-
-  if (maxIndex >= 0) {
-    let item = newItems[maxIndex];
-
-    let newItem: PaymentItem = {
-      ...item,
-      price: 0,
-      payWithStamps: item.couldBePaidWithStamps,
-      giveStamps: StampType.NONE,
-    };
-
-    newItems.splice(maxIndex, 1, newItem);
-  }
-
-  let total = calculateTotal(newItems);
-
-  return {
-    total: total.total,
-    coffeeStamps: total.coffeeStamps,
-    bottleStamps: total.bottleStamps,
-    items: newItems,
-  };
-}
+import { calcAlternativeStamps, calculateTotal, trimPrefix } from './paymentSliceHelper';
+import {
+  PaymentItem,
+  PaymentAccount,
+  PaymentState,
+  PaymentPayment,
+  PAYMENT_ERROR_TIMEOUT,
+  initialState,
+  NotificationColor,
+  NotificationType,
+  NOTIFICATION_TIMEOUT,
+  PaymentProduct,
+  PAYMENT_INPROGRESS_TIMEOUT,
+  PAYMENT_SUCCESS_TIMEOUT,
+  PAYMENT_WAITING_TIMEOUT,
+  SCREENSAVER_TIMEOUT,
+  Notification,
+} from './paymentSliceModel';
 
 async function onReceiveAccountAccessToken(
   accessToken: string,
@@ -432,42 +216,6 @@ export const productScanned = createAsyncThunk<
 
   return await onProductScanned(query.product_id, state, query.apollo);
 });
-
-function trimPrefix(str: string, prefix: string) {
-  if (str.startsWith(prefix)) {
-    return str.slice(prefix.length);
-  } else {
-    return str;
-  }
-}
-
-function calculateTotal(storedPaymentItems: PaymentItem[]) {
-  const total = storedPaymentItems.reduce((previous, current) => previous + current.price, 0);
-  const coffeeStamps = storedPaymentItems.reduce((previous, current) => {
-    if (current.payWithStamps === StampType.COFFEE) {
-      return previous - 10;
-    } else if (current.giveStamps === StampType.COFFEE) {
-      return previous + 1;
-    } else {
-      return previous;
-    }
-  }, 0);
-  const bottleStamps = storedPaymentItems.reduce((previous, current) => {
-    if (current.payWithStamps === StampType.BOTTLE) {
-      return previous - 10;
-    } else if (current.giveStamps === StampType.BOTTLE) {
-      return previous + 1;
-    } else {
-      return previous;
-    }
-  }, 0);
-
-  return {
-    total,
-    coffeeStamps,
-    bottleStamps,
-  };
-}
 
 export const paymentSlice = createSlice({
   name: 'payment',

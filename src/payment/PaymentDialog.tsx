@@ -4,17 +4,13 @@ import './PaymentDialog.scss';
 import { MdClose, MdDone, MdErrorOutline, MdHelpOutline } from 'react-icons/md';
 import { SiContactlesspayment } from 'react-icons/si';
 import Money from '../components/Money';
-import {
-  PaymentPayment,
-  paymentProceedWithoutStamps,
-  paymentProceedWithStamps,
-  receiveAccountAccessToken,
-} from './paymentSlice';
+import { paymentProceedWithoutStamps, paymentProceedWithStamps, receiveAccountAccessToken } from './paymentSlice';
 import Stamp from '../components/Stamp';
 import { StampType } from '../types/graphql-global';
 import { useAppDispatch } from '../store';
 import { useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { PaymentPayment } from './paymentSliceModel';
 
 export default function PaymentDialog(props: { payment: PaymentPayment; onClose: () => void }) {
   const { t } = useTranslation();

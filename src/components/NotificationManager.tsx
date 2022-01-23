@@ -1,7 +1,8 @@
 import React from 'react';
 import './NotificationManager.scss';
 import { useAppDispatch, useAppSelector } from '../store';
-import { Notification, NotificationType, hideNotification, NotificationColor } from '../payment/paymentSlice';
+import { hideNotification } from '../payment/paymentSlice';
+import { Notification, NotificationType, NotificationColor } from '../payment/paymentSliceModel';
 import { MdInfoOutline, MdPayment, MdQrCode2 } from 'react-icons/md';
 
 export default function NotificationManager() {
