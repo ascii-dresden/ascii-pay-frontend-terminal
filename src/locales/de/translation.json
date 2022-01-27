@@ -26,6 +26,7 @@
     "actions": "Aktionen",
     "reload": "App neu laden",
     "restart": "NFC-Terminal neu starten",
+    "fullscreen": "Vollbildmodus öffnen",
     "windowSize": "Fenstergröße",
     "terminal": "NFC-Terminal",
     "language": "Sprache",

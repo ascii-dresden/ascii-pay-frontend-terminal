@@ -119,6 +119,9 @@ export default function SettingsPage(props: { authClient: AsciiPayAuthentication
               <div className="settings-item settings-actions form">
                 <button onClick={() => window.location.reload()}>{t('settingsPage.reload')}</button>
                 <button onClick={() => props.authClient.requestReboot()}>{t('settingsPage.restart')}</button>
+                <button onClick={() => document.getElementById('root')?.requestFullscreen()}>
+                  {t('settingsPage.fullscreen')}
+                </button>
               </div>
             </div>
           </div>

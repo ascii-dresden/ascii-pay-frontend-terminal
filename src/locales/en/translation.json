@@ -26,6 +26,7 @@
     "actions": "Actions",
     "reload": "Reload app",
     "restart": "Restart NFC terminal",
+    "fullscreen": "Open fullscreen mode",
     "windowSize": "Window size",
     "terminal": "NFC terminal",
     "language": "Language",
