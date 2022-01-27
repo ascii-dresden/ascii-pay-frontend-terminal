@@ -194,6 +194,7 @@ function ProductItem(props: { product: getProducts_getProducts }) {
 
   let splitName = start >= 0 && end >= start;
 
+  let flags = props.product.flags.map((flag) => flag.toLocaleLowerCase());
   let name = (
     <div className="product-entry-name">
       <span>{splitName ? props.product.name.substring(0, start) : props.product.name}</span>
@@ -203,9 +204,14 @@ function ProductItem(props: { product: getProducts_getProducts }) {
           {props.product.nickname}
         </div>
       ) : null}
-      {props.product.flags.includes('BIO') ? (
+      {flags.includes('bio') ? (
         <div key="bio" className="product-entry-bio">
           <FaLeaf />
+        </div>
+      ) : null}
+      {flags.includes('vegan') ? (
+        <div key="bio" className="product-entry-vegan">
+          <span>VEGAN</span>
         </div>
       ) : null}
     </div>

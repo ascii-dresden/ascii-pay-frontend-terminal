@@ -27,6 +27,7 @@ function NoteGroup(props: { name: string; image: string; centValue: number; coun
         alt={moneyToString(props.centValue)}
         key={noteIndex}
         className={classList}
+        draggable={false}
         style={{ transform: `rotate(${rotation}deg)` }}
       />
     );

@@ -148,9 +148,19 @@ function QuickAccessEntryView(props: { entry: QuickAccessEntry }) {
     );
   }
   if (props.entry.giveStamps === StampType.COFFEE) {
-    stemp = <img id="coffee-stamp" src="/kaffe_stempel_icons.svg" alt="" />;
+    stemp = (
+      <div key="coffee-1" className="quick-access-entry-stamp">
+        <span>+</span>
+        <img id="coffee-stamp" src="/kaffe_stempel_icons.svg" alt="" />
+      </div>
+    );
   } else if (props.entry.giveStamps === StampType.BOTTLE) {
-    stemp = <img id="bottle-stamp" src="/getraeke_stempel_icons.svg" alt="" />;
+    stemp = (
+      <div key="bottle-1" className="quick-access-entry-stamp">
+        <span>+</span>
+        <img id="bottle-stamp" src="/getraeke_stempel_icons.svg" alt="" />
+      </div>
+    );
   }
 
   let center: any | null = null;
