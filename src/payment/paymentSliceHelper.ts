@@ -42,94 +42,172 @@ export function trimPrefix(str: string, prefix: string) {
   }
 }
 
-export function calculateTotal(storedPaymentItems: PaymentItem[]) {
-  const total = storedPaymentItems.reduce((previous, current) => previous + current.price, 0);
-  const coffeeStamps = storedPaymentItems.reduce((previous, current) => {
-    if (current.payWithStamps === StampType.COFFEE) {
-      return previous - 10;
-    } else if (current.giveStamps === StampType.COFFEE) {
-      return previous + 1;
-    } else {
-      return previous;
-    }
-  }, 0);
-  const bottleStamps = storedPaymentItems.reduce((previous, current) => {
-    if (current.payWithStamps === StampType.BOTTLE) {
-      return previous - 10;
-    } else if (current.giveStamps === StampType.BOTTLE) {
-      return previous + 1;
-    } else {
-      return previous;
-    }
-  }, 0);
-
-  return {
-    total,
-    coffeeStamps,
-    bottleStamps,
-  };
-}
-
-export function calcAlternativeStamps(
-  current: {
-    total: number;
-    coffeeStamps: number;
-    bottleStamps: number;
-    items: PaymentItem[];
-  },
-  account: PaymentAccount
-): {
+export function calculateTotal(items: PaymentItem[]): {
   total: number;
   coffeeStamps: number;
   bottleStamps: number;
-  items: PaymentItem[];
 } {
-  let newItems = current.items.slice();
+  let helper = TransactionHelper.fromItems(items);
 
-  let maxPrice: number = 0;
-  let maxIndex: number = -1;
-  for (let i = 0; i < newItems.length; i++) {
-    let item = newItems[i];
+  return {
+    total: helper.price,
+    coffeeStamps: helper.coffeeStamps,
+    bottleStamps: helper.bottleStamps,
+  };
+}
 
-    if (item.payWithStamps !== StampType.NONE) {
-      continue;
+class TransactionHelper {
+  price: number;
+  coffeeStamps: number;
+  bottleStamps: number;
+
+  constructor(price: number = 0, coffee_stamps: number = 0, bottle_stamps: number = 0) {
+    this.price = price;
+    this.coffeeStamps = coffee_stamps;
+    this.bottleStamps = bottle_stamps;
+  }
+
+  static fromItems(items: PaymentItem[]) {
+    let helper = new TransactionHelper();
+    for (let item of items) {
+      helper.addItem(item);
     }
+    return helper;
+  }
 
+  addItem(item: PaymentItem) {
+    switch (item.payWithStamps) {
+      case StampType.NONE:
+        this.price += item.price;
+
+        switch (item.giveStamps) {
+          case StampType.COFFEE:
+            this.coffeeStamps += 1;
+            break;
+          case StampType.BOTTLE:
+            this.bottleStamps += 1;
+            break;
+        }
+        break;
+      case StampType.COFFEE:
+        this.coffeeStamps -= 10;
+        break;
+      case StampType.BOTTLE:
+        this.bottleStamps -= 10;
+        break;
+    }
+  }
+
+  removeItem(item: PaymentItem) {
+    switch (item.payWithStamps) {
+      case StampType.NONE:
+        this.price -= item.price;
+
+        switch (item.giveStamps) {
+          case StampType.COFFEE:
+            this.coffeeStamps -= 1;
+            break;
+          case StampType.BOTTLE:
+            this.bottleStamps -= 1;
+            break;
+        }
+        break;
+      case StampType.COFFEE:
+        this.coffeeStamps += 10;
+        break;
+      case StampType.BOTTLE:
+        this.bottleStamps += 10;
+        break;
+    }
+  }
+
+  clone(): TransactionHelper {
+    return new TransactionHelper(this.price, this.coffeeStamps, this.bottleStamps);
+  }
+
+  checkIfItemCouldBePaidWithStamps(account: PaymentAccount, item: PaymentItem): boolean {
     switch (item.couldBePaidWithStamps) {
       case StampType.COFFEE:
-        if (account.coffeeStamps >= 10 && item.price > maxPrice) {
-          maxIndex = i;
-          maxPrice = item.price;
+        if (account.coffeeStamps + this.coffeeStamps >= 10) {
+          return true;
         }
         break;
       case StampType.BOTTLE:
-        if (account.bottleStamps >= 10 && item.price > maxPrice) {
-          maxIndex = i;
-          maxPrice = item.price;
+        if (account.bottleStamps + this.bottleStamps >= 10) {
+          return true;
         }
         break;
     }
+
+    return false;
   }
 
-  if (maxIndex >= 0) {
-    let item = newItems[maxIndex];
+  findItemsThatCouldBePaidWithStamps(account: PaymentAccount, items: PaymentItem[]): PaymentItem[] {
+    let result: PaymentItem[] = [];
 
-    let newItem: PaymentItem = {
-      ...item,
-      price: 0,
-      payWithStamps: item.couldBePaidWithStamps,
-      giveStamps: StampType.NONE,
-    };
+    for (let item of items) {
+      let helper = this.clone();
+      helper.removeItem(item);
 
-    newItems.splice(maxIndex, 1, newItem);
+      if (helper.checkIfItemCouldBePaidWithStamps(account, item)) {
+        result.push(item);
+      }
+    }
+
+    return result;
   }
 
-  let total = calculateTotal(newItems);
+  checkIfCouldBeAppliedToAccount(account: PaymentAccount): boolean {
+    if (account.credit + this.price < account.minimumCredit) {
+      return false;
+    }
 
-  return {
-    total: total.total,
-    coffeeStamps: total.coffeeStamps,
-    bottleStamps: total.bottleStamps,
-    items: newItems,
-  };
+    if (account.useDigitalStamps) {
+      if (account.coffeeStamps + this.coffeeStamps < 0) {
+        return false;
+      }
+
+      if (account.bottleStamps + this.bottleStamps < 0) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+}
+
+export function calcAlternativeStamps(items: PaymentItem[], account: PaymentAccount): PaymentItem[] {
+  let helper = TransactionHelper.fromItems(items);
+
+  let removableItems = helper.findItemsThatCouldBePaidWithStamps(account, items);
+
+  let maxPrice: number = 0;
+  let maxIndex: number = -1;
+
+  for (let i = 0; i < removableItems.length; i++) {
+    let item = removableItems[i];
+    if (item.price > maxPrice) {
+      maxPrice = item.price;
+      maxIndex = i;
+    }
+  }
+
+  if (maxIndex < 0) {
+    return items;
+  }
+
+  let newItems = items.slice();
+  let removeItem = removableItems[maxIndex];
+
+  let removeIndex = items.indexOf(removeItem);
+
+  newItems.splice(removeIndex, 1, {
+    ...removeItem,
+    price: 0,
+    payWithStamps: removeItem.couldBePaidWithStamps,
+    couldBePaidWithStamps: StampType.NONE,
+    giveStamps: StampType.NONE,
+  });
+
+  return calcAlternativeStamps(newItems, account);
 }

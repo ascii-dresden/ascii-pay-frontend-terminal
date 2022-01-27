@@ -77,6 +77,8 @@ export const GET_ACCOUNT_BY_ACCESS_TOKEN = gql`
       credit
       coffeeStamps
       bottleStamps
+      minimumCredit
+      useDigitalStamps
     }
   }
 `;
@@ -100,6 +102,8 @@ export const TRANSACTION = gql`
         credit
         coffeeStamps
         bottleStamps
+        minimumCredit
+        useDigitalStamps
       }
       accountAccessToken
       error {

@@ -77,16 +77,10 @@ async function onReceiveAccountAccessToken(
           credit: data.transaction.account.credit,
           coffeeStamps: data.transaction.account.coffeeStamps,
           bottleStamps: data.transaction.account.bottleStamps,
+          minimumCredit: data.transaction.account.minimumCredit,
+          useDigitalStamps: data.transaction.account.useDigitalStamps,
         };
-        let withStamps = calcAlternativeStamps(
-          {
-            total: payment.total,
-            coffeeStamps: payment.coffeeStamps,
-            bottleStamps: payment.bottleStamps,
-            items: payment.items,
-          },
-          account
-        );
+        let alternativeItems = calcAlternativeStamps(payment.items, account);
 
         return {
           account: account,
@@ -99,7 +93,10 @@ async function onReceiveAccountAccessToken(
             coffeeStamps: payment.coffeeStamps,
             bottleStamps: payment.bottleStamps,
             items: payment.items,
-            withStamps: withStamps,
+            withStamps: {
+              ...calculateTotal(alternativeItems),
+              items: alternativeItems,
+            },
           },
         };
       } else {
@@ -110,6 +107,8 @@ async function onReceiveAccountAccessToken(
             credit: data.transaction.account.credit,
             coffeeStamps: data.transaction.account.coffeeStamps,
             bottleStamps: data.transaction.account.bottleStamps,
+            minimumCredit: data.transaction.account.minimumCredit,
+            useDigitalStamps: data.transaction.account.useDigitalStamps,
           },
           payment: {
             type: 'Success',
@@ -143,6 +142,8 @@ async function onReceiveAccountAccessToken(
           credit: data.getAccountByAccessToken.credit,
           coffeeStamps: data.getAccountByAccessToken.coffeeStamps,
           bottleStamps: data.getAccountByAccessToken.bottleStamps,
+          minimumCredit: data.getAccountByAccessToken.minimumCredit,
+          useDigitalStamps: data.getAccountByAccessToken.useDigitalStamps,
         },
       };
     }

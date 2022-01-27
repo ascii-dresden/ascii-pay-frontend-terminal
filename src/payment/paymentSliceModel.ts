@@ -6,6 +6,8 @@ export interface PaymentAccount {
   credit: number;
   coffeeStamps: number;
   bottleStamps: number;
+  minimumCredit: number;
+  useDigitalStamps: boolean;
 }
 export interface PaymentProduct {
   id: UUID;
