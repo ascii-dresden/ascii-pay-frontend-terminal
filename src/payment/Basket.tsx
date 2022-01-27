@@ -54,7 +54,7 @@ export default function Basket() {
         );
       } else {
         image = (
-          <div>
+          <div className="basket-entry-image-shadow">
             <MdPhoto />
           </div>
         );
@@ -62,13 +62,13 @@ export default function Basket() {
     } else {
       if (value.price < 0) {
         image = (
-          <div>
+          <div className="basket-entry-image-shadow">
             <MdOutlineRedeem />
           </div>
         );
       } else {
         image = (
-          <div>
+          <div className="basket-entry-image-shadow">
             <MdEuroSymbol />
           </div>
         );

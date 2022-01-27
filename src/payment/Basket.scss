@@ -185,3 +185,9 @@
     padding: 0.4rem 2rem;
   }
 }
+
+body[data-theme='dark'] {
+  .basket-entry-image-shadow * {
+    filter: drop-shadow(0 0 0.7px var(--tertiary-background));
+  }
+}
