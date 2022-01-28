@@ -76,16 +76,23 @@ export default function Basket() {
     }
 
     let stamps: any[] = [];
-    if (value.payWithStamps === StampType.COFFEE || value.couldBePaidWithStamps === StampType.COFFEE) {
-      stamps.push(<Stamp key="coffee-10" value={-10} type={StampType.COFFEE} />);
-    } else if (value.payWithStamps === StampType.BOTTLE || value.couldBePaidWithStamps === StampType.BOTTLE) {
-      stamps.push(<Stamp key="bottle-10" value={-10} type={StampType.BOTTLE} />);
-    }
-
     if (value.giveStamps === StampType.COFFEE) {
       stamps.push(<Stamp key="coffee+1" value={1} type={StampType.COFFEE} />);
     } else if (value.giveStamps === StampType.BOTTLE) {
       stamps.push(<Stamp key="bottle+1" value={1} type={StampType.BOTTLE} />);
+    }
+
+    if (
+      value.giveStamps !== StampType.NONE &&
+      (value.payWithStamps !== StampType.NONE || value.couldBePaidWithStamps !== StampType.NONE)
+    ) {
+      stamps.push(<span key="or">{t('general.or')}</span>);
+    }
+
+    if (value.payWithStamps === StampType.COFFEE || value.couldBePaidWithStamps === StampType.COFFEE) {
+      stamps.push(<Stamp key="coffee-10" value={-10} type={StampType.COFFEE} />);
+    } else if (value.payWithStamps === StampType.BOTTLE || value.couldBePaidWithStamps === StampType.BOTTLE) {
+      stamps.push(<Stamp key="bottle-10" value={-10} type={StampType.BOTTLE} />);
     }
 
     let colorClass = value.colorHint ? ' ' + value.colorHint : '';

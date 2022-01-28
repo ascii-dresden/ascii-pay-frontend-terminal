@@ -195,27 +195,38 @@ function ProductItem(props: { product: getProducts_getProducts }) {
   let splitName = start >= 0 && end >= start;
 
   let flags = props.product.flags.map((flag) => flag.toLocaleLowerCase());
-  let name = (
-    <div className="product-entry-name">
-      <span>{splitName ? props.product.name.substring(0, start) : props.product.name}</span>
-      {splitName ? <i>{props.product.name.substring(start, end)}</i> : null}
-      {props.product.nickname ? (
-        <div key="nickname" className="product-entry-nickname">
-          {props.product.nickname}
-        </div>
-      ) : null}
-      {flags.includes('bio') ? (
-        <div key="bio" className="product-entry-bio">
-          <FaLeaf />
-        </div>
-      ) : null}
-      {flags.includes('vegan') ? (
-        <div key="bio" className="product-entry-vegan">
-          <span>VEGAN</span>
-        </div>
-      ) : null}
-    </div>
-  );
+
+  let nameArray = [];
+
+  if (splitName) {
+    nameArray.push(<span key="name">{props.product.name.substring(0, start)}</span>);
+    nameArray.push(<i key="splitName">{props.product.name.substring(start, end)}</i>);
+  } else {
+    nameArray.push(<span key="name">{props.product.name}</span>);
+  }
+  if (props.product.nickname) {
+    nameArray.push(
+      <div key="nickname" className="product-entry-nickname">
+        {props.product.nickname}
+      </div>
+    );
+  }
+  if (flags.includes('bio')) {
+    nameArray.push(
+      <div key="bio" className="product-entry-bio">
+        <FaLeaf />
+      </div>
+    );
+  }
+  if (flags.includes('vegan')) {
+    nameArray.push(
+      <div key="vegan" className="product-entry-vegan">
+        <span>VEGAN</span>
+      </div>
+    );
+  }
+
+  let name = <div className="product-entry-name">{nameArray}</div>;
 
   return (
     <div onClick={clickHandler}>

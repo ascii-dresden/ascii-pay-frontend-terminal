@@ -119,6 +119,10 @@ body[data-theme='dark'] {
   span {
     display: none;
   }
+
+  .quick-access-entry-stamp img {
+    margin-left: 0rem !important;
+  }
 }
 
 .quick-access-entry-name {
