@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store';
 import { setNote10, setNote100, setNote20, setNote5, setNote50 } from './registerSlice';
 import './NoteBox.scss';
@@ -53,6 +53,13 @@ export default function NoteBox() {
   const [selectedGroup, setSelectedGroup] = useState(
     null as { cents: number; noteHeight: number; top: number; height: number; offset: number } | null
   );
+
+  useEffect(() => {
+    document.body.classList.add('note-box-body');
+    return () => {
+      document.body.classList.remove('note-box-body');
+    };
+  });
 
   const getNoteCount = (cents: number) => {
     switch (cents) {

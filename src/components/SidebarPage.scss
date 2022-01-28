@@ -13,7 +13,6 @@
     height: 100%;
     background-color: var(--primary-background);
     border-right: solid 1px var(--border-color);
-    overflow: hidden;
 
     & > div > div {
       width: 4rem;
@@ -21,6 +20,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      border-right: solid 1px var(--border-color);
 
       svg,
       img {
@@ -39,7 +40,10 @@
 
       &.active {
         color: var(--theme-color);
-        background-color: var(--secondary-background);
+        background-color: var(--active-tab-background);
+        border-top: solid 1px var(--border-color);
+        border-bottom: solid 1px var(--border-color);
+        border-right-color: transparent;
       }
     }
 
@@ -60,6 +64,10 @@
     .sidebar-bottom {
       position: absolute;
       bottom: 0;
+
+      & > div:last-child.active {
+        border-bottom-color: transparent;
+      }
     }
   }
 

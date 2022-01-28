@@ -23,6 +23,8 @@ body {
   --bottle-color: #fde09e;
   --coffee-color: #f1b474;
   --cup-color: #b5cbed;
+
+  --active-tab-background: var(--secondary-background);
 }
 
 body[data-theme='dark'] {

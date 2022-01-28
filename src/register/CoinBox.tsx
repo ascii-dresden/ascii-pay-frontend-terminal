@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store';
 import { setCoin1, setCoin10, setCoin100, setCoin2, setCoin20, setCoin200, setCoin5, setCoin50 } from './registerSlice';
 import './CoinBox.scss';
@@ -85,6 +85,13 @@ export default function CoinBox() {
   const [selectedGroup, setSelectedGroup] = useState(
     null as { cents: number; count: number; top: number; height: number; offset: number } | null
   );
+
+  useEffect(() => {
+    document.body.classList.add('coin-box-body');
+    return () => {
+      document.body.classList.remove('coin-box-body');
+    };
+  });
 
   const getCoinCount = (cents: number) => {
     switch (cents) {
