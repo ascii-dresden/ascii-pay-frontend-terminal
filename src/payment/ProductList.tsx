@@ -35,6 +35,7 @@ export default function ProductList() {
   });
 
   let [tabIndex, setTabIndex] = useState(0);
+  let [useGridLayout, setUseGridLayout] = useState(false);
 
   if (loading) {
     return <></>;
@@ -100,7 +101,7 @@ export default function ProductList() {
         name = t('payment.products.bottle_500');
         break;
       case 'Kaltgetränke 0,33l':
-        icon = <FaWineBottle />;
+        icon = <FaWineBottle className="small" />;
         name = t('payment.products.bottle_330');
         break;
       case 'Snacks':
@@ -109,8 +110,16 @@ export default function ProductList() {
         break;
     }
 
+    let onTabClick = (index: number) => {
+      if (index === tabIndex) {
+        setUseGridLayout(!useGridLayout);
+      } else {
+        setTabIndex(currentTabIndex);
+      }
+    };
+
     tabs.push(
-      <div key={entry.categoryId} className={active ? 'active' : ''} onClick={() => setTabIndex(currentTabIndex)}>
+      <div key={entry.categoryId} className={active ? 'active' : ''} onClick={() => onTabClick(currentTabIndex)}>
         {icon}
         <span>{name}</span>
       </div>
@@ -128,7 +137,7 @@ export default function ProductList() {
 
   return (
     <div className="product-list">
-      <div className="product-list-content">{content}</div>
+      <div className={'product-list-content ' + (useGridLayout ? 'grid-layout' : 'list-layout')}>{content}</div>
       <div className="product-list-tabs">{tabs}</div>
     </div>
   );
